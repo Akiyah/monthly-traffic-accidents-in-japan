@@ -4,7 +4,11 @@ require 'date'
 require 'open-uri'
 
 PARAMS = [
-  { year: 2020, month: 5, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031954930&fileKind=0', sheet: '表4-1' }
+  { year: 2020, month: 5, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031954930&fileKind=0', sheet: '表4-1' },
+  { year: 2020, month: 4, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031946471&fileKind=0', sheet: '表4-1' },
+  { year: 2020, month: 3, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031932630&fileKind=0', sheet: '表4-1' },
+  { year: 2020, month: 2, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031919321&fileKind=0', sheet: '表4-1' },
+  { year: 2020, month: 1, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031912130&fileKind=0', sheet: '表4-1' }
 ]
 
 AREA_PREFECTURE = [
