@@ -1,9 +1,20 @@
 PARAMS = [
-  { year: 2020, month: 5, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031954930&fileKind=0', sheet: '表4-1' },
-  { year: 2020, month: 4, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031946471&fileKind=0', sheet: '表4-1' },
-  { year: 2020, month: 3, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031932630&fileKind=0', sheet: '表4-1' },
-  { year: 2020, month: 2, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031919321&fileKind=0', sheet: '表4-1' },
-  { year: 2020, month: 1, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031912130&fileKind=0', sheet: '表4-1' }
+  { year: 2020, month:  5, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031954930&fileKind=0', sheet: '表4-1' },
+  { year: 2020, month:  4, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031946471&fileKind=0', sheet: '表4-1' },
+  { year: 2020, month:  3, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031932630&fileKind=0', sheet: '表4-1' },
+  { year: 2020, month:  2, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031919321&fileKind=0', sheet: '表4-1' },
+  { year: 2020, month:  1, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031912130&fileKind=0', sheet: '表4-1' },
+  { year: 2019, month: 11, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031887960&fileKind=0', sheet: '表4-1' },
+  { year: 2019, month: 10, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031878517&fileKind=0', sheet: '表4-1' },
+  { year: 2019, month:  9, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031871563&fileKind=0', sheet: '表4-1' },
+  { year: 2019, month:  8, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031861747&fileKind=0', sheet: '表4-1' },
+  { year: 2019, month:  7, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031852516&fileKind=0', sheet: '表4-1' },
+  { year: 2019, month:  6, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031844036&fileKind=0', sheet: '表4-1' },
+  { year: 2019, month:  5, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031834517&fileKind=0', sheet: '表4-1' },
+  { year: 2019, month:  4, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031826696&fileKind=0', sheet: '表4-1' },
+  { year: 2019, month:  3, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031819316&fileKind=0', sheet: '表4-1' },
+  { year: 2019, month:  2, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031808156&fileKind=0', sheet: '表4-1' },
+  { year: 2019, month:  1, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000031798157&fileKind=0', sheet: '表4-1' },
 ]
 
 AREA_PREFECTURE = [
