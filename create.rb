@@ -3,9 +3,8 @@ require 'csv'
 require 'date'
 require './params.rb'
 
-
-CSV.open('csv/monthly-traffic-accidents-in-japan.csv','w') do |csv|
-  csv << %w(year month area prefecture 発生件数（速報値） 死者数（確定値） 負傷者数（速報値）)
+CSV.open('tsv/monthly-traffic-accidents-in-japan.tsv','w', col_sep: "\t") do |tsv|
+  tsv << %w(year month area prefecture 発生件数（速報値） 死者数（確定値） 負傷者数（速報値）)
 
   PARAMS.each do |param|
     year = param[:year]
@@ -21,7 +20,7 @@ CSV.open('csv/monthly-traffic-accidents-in-japan.csv','w') do |csv|
       v0 = xlsx.sheet(sheet).cell(i + 1, 'C')
       v1 = xlsx.sheet(sheet).cell(i + 1, 'F')
       v2 = xlsx.sheet(sheet).cell(i + 1, 'J')
-      csv << [year, month, area, prefecture, v0, v1, v2]
+      tsv << [year, month, area, prefecture, v0, v1, v2]
     end
   end
 end
