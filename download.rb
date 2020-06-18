@@ -7,7 +7,8 @@ PARAMS.each do |param|
   year = param[:year]
   month = param[:month]
   url = param[:url]
-  filename = "xlsx/#{year}_#{month}.xlsx"
+  type = param[:type]
+  filename = "xlsx/#{year}_#{month}.#{type}"
 
   next if File.exist?(filename)
 
