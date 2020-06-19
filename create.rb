@@ -3,33 +3,19 @@ require 'roo-xls'
 require 'csv'
 require 'date'
 require './params.rb'
+require './reader.rb'
 
 data = {}
 PARAMS.each do |param|
   year = param[:year]
   month = param[:month]
   sheet = param[:sheet]
+  ext = param[:ext]
   type = param[:type]
 
-  filename = "xlsx/#{year}_#{month}.#{type}"
-  if type == 'xlsx'
-    excel = Roo::Excelx.new(filename)
-  else
-    excel = Roo::Excel.new(filename)
-  end
-
-  AREA_PREFECTURE.each_with_index do |area_prefecture, i|
-    next unless area_prefecture
-    area, prefecture = area_prefecture
-
-    v0 = excel.sheet(sheet).cell(i + 1, 'C').to_i
-    v1 = excel.sheet(sheet).cell(i + 1, 'F').to_i
-    v2 = excel.sheet(sheet).cell(i + 1, 'J').to_i
-    data[year] ||= {}
-    data[year][month] ||= {}
-    data[year][month][area] ||= {}
-    data[year][month][area][prefecture] = [v0, v1, v2]
-  end
+  reader = (type == 'B' ? ReaderB.new : ReaderA.new)
+  data[year] ||= {}
+  data[year][month] = reader.read("xlsx/#{year}_#{month}.#{ext}", sheet)
 end
 
 CSV.open('tsv/monthly-traffic-accidents-in-japan.tsv','w', col_sep: "\t") do |tsv|
