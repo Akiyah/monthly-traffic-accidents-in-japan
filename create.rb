@@ -4,18 +4,21 @@ require 'csv'
 require 'date'
 require './params.rb'
 require './reader.rb'
+require './downloader.rb'
 
 data = {}
+downloader = Downloader.new
 PARAMS.each do |param|
   year = param[:year]
   month = param[:month]
   sheet = param[:sheet]
-  ext = param[:ext]
   type = param[:type]
+
+  filename = downloader.download(param)
 
   reader = (type == 'B' ? ReaderB.new : ReaderA.new)
   data[year] ||= {}
-  data[year][month] = reader.read("xlsx/#{year}_#{month}.#{ext}", sheet)
+  data[year][month] = reader.read(filename, sheet)
 end
 
 CSV.open('tsv/monthly-traffic-accidents-in-japan.tsv','w', col_sep: "\t") do |tsv|

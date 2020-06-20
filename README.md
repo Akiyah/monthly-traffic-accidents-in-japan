@@ -3,8 +3,7 @@
 ## command
 
 ```
-% ruby download.rb
-% ruby create.rb > tsv/monthly-traffic-accidents-in-japan.ts
+% ruby create.rb
 ```
 
 ## グラフ
