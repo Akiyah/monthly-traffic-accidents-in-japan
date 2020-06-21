@@ -22,8 +22,8 @@ PARAMS.each do |param|
 end
 
 CSV.open('tsv/monthly-traffic-accidents-in-japan.tsv','w', col_sep: "\t") do |tsv|
-  #tsv << %w(year month area prefecture 発生件数（速報値） 死者数（確定値） 負傷者数（速報値） 発生件数（速報値）月末 死者数（確定値）月末 負傷者数（速報値）月末)
-  tsv << %w(year month area prefecture 発生件数（速報値） 死者数（確定値） 負傷者数（速報値）)
+  #tsv << %w(年 月 管区 都道府県 発生件数（速報値） 死者数（確定値） 負傷者数（速報値） 発生件数（速報値）月末 死者数（確定値）月末 負傷者数（速報値）月末)
+  tsv << %w(年 月 管区 都道府県 発生件数（速報値） 死者数（確定値） 負傷者数（速報値）)
   data.each do |year, v|
     data[year].each do |month, v|
       data[year][month].each do |area, v|
