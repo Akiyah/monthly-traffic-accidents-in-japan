@@ -10,6 +10,43 @@ var COLORS = [
   '#FFE0B3',
 ];
 
+function createDataset(label, backgroundColor, data) {
+  return {
+    label: label,
+    lineTension: 0,
+    backgroundColor: backgroundColor,
+    borderColor: 'black',
+    borderWidth: 1,
+    data: data
+  };
+}
+function createConfig(yms, datasets, title) {
+  return {
+    type: 'bar',
+    data: {
+      labels: yms,
+      datasets: datasets
+    },
+    options: {
+      title: {
+        display: true,
+        text: title,
+      },
+      scales: {
+        xAxes: [{
+          stacked: true,
+        }],
+        yAxes: [{
+          stacked: true,
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  };
+}
+
 function drawChart(csv) {
   let area_ym = {};
   let areas = [];
@@ -26,64 +63,51 @@ function drawChart(csv) {
     let month = row[1];
     let area = row[2];
     let prefecture = row[3];
-    let accidents = Number(row[4]);
+    let v0 = Number(row[4]);
+    let v1 = Number(row[5]);
+    let v2 = Number(row[6]);
 
     let ym = year + '/' + (month >= 10 ? month : ('0' + month));
 
-    if (!areas.includes(area)) {
-      areas.push(area);
-    }
-
-    if (!yms.includes(ym)) {
-      yms.push(ym);
-    }
-
-    if (!area_ym[area]) {
-      area_ym[area] = {};
-    }
-
     if (prefecture == '計' && area != '合計') {
-      area_ym[area][ym] = accidents;
+      if (!areas.includes(area)) {
+        areas.push(area);
+      }
+
+      if (!yms.includes(ym)) {
+        yms.push(ym);
+      }
+
+      if (!area_ym[area]) {
+        area_ym[area] = {};
+      }
+      area_ym[area][ym] = [v0, v1, v2];
     }
   });
 
   yms.sort();
 
-  let datasets = [];
+  let datasets0 = [];
+  let datasets1 = [];
+  let datasets2 = [];
   areas.forEach((area, i) => {
-    datasets.push({
-      label: area,
-      lineTension: 0,
-      backgroundColor: COLORS[i % COLORS.length],
-      borderColor: 'black',
-      borderWidth: 1,
-      data: yms.map(ym => area_ym[area][ym])
-    });
+    console.log(area_ym);
+    console.log(area);
+    console.log(area_ym[area]);
+    console.log(yms);
+    datasets0.push(createDataset(area, COLORS[i % COLORS.length], yms.map(ym => area_ym[area][ym][0])));
+    datasets1.push(createDataset(area, COLORS[i % COLORS.length], yms.map(ym => area_ym[area][ym][1])));
+    datasets2.push(createDataset(area, COLORS[i % COLORS.length], yms.map(ym => area_ym[area][ym][2])));
   });
 
-  let config = {
-    type: 'bar',
-    data: {
-      labels: yms,
-      datasets: datasets
-    },
-    options: {
-      scales: {
-        xAxes: [{
-          stacked: true,
-        }],
-        yAxes: [{
-          stacked: true,
-          ticks: {
-            beginAtZero: true
-          }
-        }]
-      }
-    }
-  };
+  let ctx0 = document.getElementById("chart0").getContext("2d");
+  let chart0 = new Chart(ctx0, createConfig(yms, datasets0, "発生件数（速報値）"));
 
-  let ctx = document.getElementById("myChart").getContext("2d");
-  let myChart = new Chart(ctx, config);
+  let ctx1 = document.getElementById("chart1").getContext("2d");
+  let chart1 = new Chart(ctx1, createConfig(yms, datasets1, "死者数（確定値）"));
+
+  let ctx2 = document.getElementById("chart2").getContext("2d");
+  let chart2 = new Chart(ctx2, createConfig(yms, datasets2, "負傷者数（速報値）"));
 }
 
 let req = new XMLHttpRequest();
