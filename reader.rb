@@ -36,6 +36,7 @@ class ReaderA < Reader
         "旭川" =>  8,
         "釧路" =>  9,
         "北見" => 10,
+        "計" => 11,
       },
       "東北" => {
         "青森" => 12,
@@ -110,26 +111,13 @@ class ReaderA < Reader
       v2: 'J',
     }
   end
-
-  def read(filename, sheet)
-    data = super(filename, sheet)
-    h = %i(v0 v1 v2 v3 v4 v5).map do |k|
-      if data["北海道"].values.all?{|v| v[k] }
-        [k, data["北海道"].values.sum{|v| v[k] }]
-      else
-        [k, nil]
-      end
-    end.to_h
-    data["北海道"] = { "北海道" => h }
-    data
-  end
 end
 
 class ReaderB < Reader
   def area_prefecture
     {
       "北海道" => {
-        "北海道" =>  6,
+        "計" => 6,
       },
       "東北" => {
         "青森" =>  7,
