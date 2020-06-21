@@ -91,10 +91,6 @@ function drawChart(csv) {
   let datasets1 = [];
   let datasets2 = [];
   areas.forEach((area, i) => {
-    console.log(area_ym);
-    console.log(area);
-    console.log(area_ym[area]);
-    console.log(yms);
     datasets0.push(createDataset(area, COLORS[i % COLORS.length], yms.map(ym => area_ym[area][ym][0])));
     datasets1.push(createDataset(area, COLORS[i % COLORS.length], yms.map(ym => area_ym[area][ym][1])));
     datasets2.push(createDataset(area, COLORS[i % COLORS.length], yms.map(ym => area_ym[area][ym][2])));
