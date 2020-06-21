@@ -2,7 +2,7 @@ require 'roo'
 require 'roo-xls'
 
 class Reader
-  def read(filename, sheet)
+  def read(filename, sheets)
     if filename.end_with?('xlsx')
       excel = Roo::Excelx.new(filename)
     else
@@ -12,11 +12,15 @@ class Reader
     data = {}
     area_prefecture.each do |area, prefectures|
       prefectures.each do |prefecture, i|
-        v0 = excel.sheet(sheet).cell(i, columns[0]).to_i
-        v1 = excel.sheet(sheet).cell(i, columns[1]).to_i
-        v2 = excel.sheet(sheet).cell(i, columns[2]).to_i
         data[area] ||= {}
-        data[area][prefecture] = [v0, v1, v2]
+        data[area][prefecture] = {
+          v0: sheets[0] ? excel.sheet(sheets[0]).cell(i, columns[:v0]).to_i : nil,
+          v1: sheets[0] ? excel.sheet(sheets[0]).cell(i, columns[:v1]).to_i : nil,
+          v2: sheets[0] ? excel.sheet(sheets[0]).cell(i, columns[:v2]).to_i : nil,
+          v3: sheets[1] ? excel.sheet(sheets[1]).cell(i, columns[:v0]).to_i : nil,
+          v4: sheets[1] ? excel.sheet(sheets[1]).cell(i, columns[:v1]).to_i : nil,
+          v5: sheets[1] ? excel.sheet(sheets[1]).cell(i, columns[:v2]).to_i : nil,
+        }
       end
     end
     data
@@ -100,13 +104,23 @@ class ReaderA < Reader
   end
 
   def columns
-    ['C', 'F', 'J']
+    {
+      v0: 'C',
+      v1: 'F',
+      v2: 'J',
+    }
   end
 
   def read(filename, sheet)
     data = super(filename, sheet)
-    sums = data["北海道"].values.inject([0, 0, 0]) {|s, v| [s[0] + v[0], s[1] + v[1], s[2] + v[2]] }
-    data["北海道"] = { "北海道" => sums }
+    h = %i(v0 v1 v2 v3 v4 v5).map do |k|
+      if data["北海道"].values.all?{|v| v[k] }
+        [k, data["北海道"].values.sum{|v| v[k] }]
+      else
+        [k, nil]
+      end
+    end.to_h
+    data["北海道"] = { "北海道" => h }
     data
   end
 end
@@ -184,6 +198,10 @@ class ReaderB < Reader
   end
 
   def columns
-    ['I', 'J', 'K']
+    {
+      v0: 'I',
+      v1: 'J',
+      v2: 'K',
+    }
   end
 end
