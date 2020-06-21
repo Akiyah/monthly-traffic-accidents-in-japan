@@ -25,6 +25,7 @@ function drawChart(csv) {
     let year = row[0];
     let month = row[1];
     let area = row[2];
+    let prefecture = row[3];
     let accidents = Number(row[4]);
 
     let ym = year + '/' + (month >= 10 ? month : ('0' + month));
@@ -41,11 +42,9 @@ function drawChart(csv) {
       area_ym[area] = {};
     }
 
-    if (!area_ym[area][ym]) {
-      area_ym[area][ym] = 0;
+    if (prefecture == '計') {
+      area_ym[area][ym] = accidents;
     }
-
-    area_ym[area][ym] += accidents;
   });
 
   yms.sort();
