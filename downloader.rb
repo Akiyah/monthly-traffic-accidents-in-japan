@@ -1,13 +1,9 @@
 require 'open-uri'
 
 class Downloader
-  def download(param)
+  def download(year, month, ext, url)
     Dir.mkdir('xlsx') unless Dir.exist?('xlsx')
 
-    year = param[:year]
-    month = param[:month]
-    url = param[:url]
-    ext = param[:ext]
     filename = "xlsx/%d_%02d.%s" % [year, month, ext]
 
     if !File.exist?(filename)
