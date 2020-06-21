@@ -42,7 +42,7 @@ function drawChart(csv) {
       area_ym[area] = {};
     }
 
-    if (prefecture == '計') {
+    if (prefecture == '計' && area != '合計') {
       area_ym[area][ym] = accidents;
     }
   });
