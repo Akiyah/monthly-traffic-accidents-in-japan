@@ -13,11 +13,10 @@ PARAMS.each do |param|
   year = param[:year]
   month = param[:month]
   url = param[:url]
-  ext = param[:ext]
   sheets = param[:sheets]
   type = param[:type]
 
-  filename = downloader.download(year, month, ext, url)
+  filename = downloader.download(year, month, url)
 
   reader = (type == 'B' ? ReaderB.new : ReaderA.new)
   data[year] ||= {}
