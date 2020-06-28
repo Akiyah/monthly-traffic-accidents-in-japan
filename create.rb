@@ -13,14 +13,13 @@ PARAMS.each do |param|
   year = param[:year]
   month = param[:month]
   url = param[:url]
-  sheets = param[:sheets]
   format = param[:format]
 
   filename = downloader.download(year, month, url)
 
   reader = Reader.create(format)
   data[year] ||= {}
-  data[year][month] = reader.read(filename, sheets[0], sheets[1])
+  data[year][month] = reader.read(filename)
 end
 
 filler = Filler.new

@@ -9,12 +9,14 @@ class Reader
     #format == 'B' ? ReaderB.new : ReaderA.new
   end
 
-  def read(filename, sheet0, sheet1)
+  def read(filename)
     if filename.end_with?('xlsx')
       excel = Roo::Excelx.new(filename)
     else
       excel = Roo::Excel.new(filename)
     end
+
+    sheet0, sheet1 = sheets
 
     data = {}
     area_prefecture_indexes.each do |area, prefectures|
@@ -48,6 +50,30 @@ class ReaderA < Reader
   end
 end
 
+class ReaderA1 < ReaderA
+  def sheets
+    ['表4-1', '表4-2']
+  end
+end
+
+class ReaderA2 < ReaderA
+  def sheets
+    [nil, '表6-2']
+  end
+end
+
+class ReaderA3 < ReaderA
+  def sheets
+    ['県別_表24', '県別_表25']
+  end
+end
+
+class ReaderA4 < ReaderA
+  def sheets
+    ['県別_表24', '県別_表24']
+  end
+end
+
 class ReaderB < Reader
   def area_prefecture_indexes
     AREA_PREFECTURE_INDEXES_B
@@ -59,5 +85,23 @@ class ReaderB < Reader
       v1: 'J',
       v2: 'K',
     }
+  end
+end
+
+class ReaderB1 < ReaderB
+  def sheets
+    [nil, '県別人口（P41）']
+  end
+end
+
+class ReaderB2 < ReaderB
+  def sheets
+    [nil, '県別人口（P38）']
+  end
+end
+
+class ReaderB3 < ReaderB
+  def sheets
+    [nil, '県別人口（P40）']
   end
 end

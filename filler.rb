@@ -33,6 +33,3 @@ class Filler
     end
   end
 end
-
-
-
