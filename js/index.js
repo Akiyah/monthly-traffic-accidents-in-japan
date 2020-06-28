@@ -69,6 +69,10 @@ function drawChart(csv) {
 
     let ym = year + '/' + (month >= 10 ? month : ('0' + month));
 
+    if (year < 2015) {
+      return;
+    }
+
     if (prefecture == '計' && area != '合計') {
       if (!areas.includes(area)) {
         areas.push(area);
