@@ -25,6 +25,7 @@ end
 filler = Filler.new
 data = filler.fill(data)
 
+puts "write tsv file"
 CSV.open('tsv/monthly-traffic-accidents-in-japan.tsv','w', col_sep: "\t") do |tsv|
   tsv << %w(年 月 管区 都道府県 発生件数（速報値） 死者数（確定値） 負傷者数（速報値） 発生件数（速報値）月末 死者数（確定値）月末 負傷者数（速報値）月末)
   data.each do |year, _|

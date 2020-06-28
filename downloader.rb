@@ -17,6 +17,7 @@ class Downloader
       else
         filename_xlsx
       end
+      puts "download: #{filename}"
       open(filename, 'w+b') do |file|
         file.write(stream.read)
       end

@@ -5,11 +5,17 @@ require './params.rb'
 class Reader
   def self.create(format)
     Module.const_get("Reader#{format}").new
-    #"Reader#{format}".constantize.new
-    #format == 'B' ? ReaderB.new : ReaderA.new
+  end
+
+  def read_cell(excel, sheet, i, column)
+    return nil unless sheet
+    return nil unless column
+
+    excel.sheet(sheet).cell(i, column).to_i
   end
 
   def read(filename)
+    puts "read: #{filename}"
     if filename.end_with?('xlsx')
       excel = Roo::Excelx.new(filename)
     else
@@ -23,12 +29,18 @@ class Reader
       prefectures.each do |prefecture, i|
         data[area] ||= {}
         data[area][prefecture] = {
-          v0: sheet0 ? excel.sheet(sheet0).cell(i, columns[:v0]).to_i : nil,
-          v1: sheet0 ? excel.sheet(sheet0).cell(i, columns[:v1]).to_i : nil,
-          v2: sheet0 ? excel.sheet(sheet0).cell(i, columns[:v2]).to_i : nil,
-          v3: sheet1 ? excel.sheet(sheet1).cell(i, columns[:v0]).to_i : nil,
-          v4: sheet1 ? excel.sheet(sheet1).cell(i, columns[:v1]).to_i : nil,
-          v5: sheet1 ? excel.sheet(sheet1).cell(i, columns[:v2]).to_i : nil,
+          v0: read_cell(excel, sheet0, i, columns[:v0]),
+          v1: read_cell(excel, sheet0, i, columns[:v1]),
+          v2: read_cell(excel, sheet0, i, columns[:v2]),
+          v3: read_cell(excel, sheet1, i, columns[:v0]),
+          v4: read_cell(excel, sheet1, i, columns[:v1]),
+          v5: read_cell(excel, sheet1, i, columns[:v2]),
+          v0_: read_cell(excel, sheet0, i, columns[:v0_]),
+          v1_: read_cell(excel, sheet0, i, columns[:v1_]),
+          v2_: read_cell(excel, sheet0, i, columns[:v2_]),
+          v3_: read_cell(excel, sheet1, i, columns[:v0_]),
+          v4_: read_cell(excel, sheet1, i, columns[:v1_]),
+          v5_: read_cell(excel, sheet1, i, columns[:v2_]),
         }
       end
     end
@@ -46,6 +58,9 @@ class ReaderA < Reader
       v0: 'C',
       v1: 'F',
       v2: 'J',
+      v0_: 'D',
+      v1_: 'G',
+      v2_: 'K',
     }
   end
 end
@@ -84,6 +99,9 @@ class ReaderB < Reader
       v0: 'I',
       v1: 'J',
       v2: 'K',
+      v0_: nil,
+      v1_: nil,
+      v2_: nil,
     }
   end
 end
