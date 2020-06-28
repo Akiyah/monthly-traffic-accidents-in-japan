@@ -5,21 +5,28 @@ require 'date'
 require './params.rb'
 require './reader.rb'
 require './downloader.rb'
+require './cacher.rb'
 require './filler.rb'
 
 data = {}
 downloader = Downloader.new
+cacher = Cacher.new
 PARAMS.each do |param|
   year = param[:year]
   month = param[:month]
   url = param[:url]
   format = param[:format]
 
-  filename = downloader.download(year, month, url)
+  data_ym = cacher.get(year, month)
+  unless data_ym
+    filename = downloader.download(year, month, url)
+    reader = Reader.create(format)
+    data_ym = reader.read(filename)
+    cacher.set(year, month, data_ym)
+  end
 
-  reader = Reader.create(format)
   data[year] ||= {}
-  data[year][month] = reader.read(filename)
+  data[year][month] = data_ym
 end
 
 filler = Filler.new
