@@ -2,7 +2,6 @@ class Filler
   def fill(data)
     puts "fill"
 
-
     puts "fill(1)"
     # "計"を追加
     data.each do |year, _|

@@ -7,6 +7,7 @@ require './reader.rb'
 require './downloader.rb'
 require './cacher.rb'
 require './filler.rb'
+require './measure.rb'
 
 data = {}
 downloader = Downloader.new
@@ -39,7 +40,7 @@ CSV.open('tsv/monthly-traffic-accidents-in-japan.tsv','w', col_sep: "\t") do |ts
     data[year].each do |month, _|
       data[year][month].each do |area, _|
         data[year][month][area].each do |prefecture, v|
-          tsv << [year, month, area, prefecture, v[:v0], v[:v1], v[:v2]]
+          tsv << [year, month, area, prefecture] + Measure.h_to_a3(v)
         end
       end
     end

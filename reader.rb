@@ -7,13 +7,6 @@ class Reader
     Module.const_get("Reader#{format}").new
   end
 
-  def read_cell(excel, sheet, i, column)
-    return nil unless sheet
-    return nil unless column
-
-    excel.sheet(sheet).cell(i, column).to_i
-  end
-
   def read(filename)
     puts "read: #{filename}"
     if filename.end_with?('xlsx')
@@ -26,22 +19,14 @@ class Reader
 
     data = {}
     area_prefecture_indexes.each do |area, prefectures|
-      prefectures.each do |prefecture, i|
+      prefectures.each do |prefecture, row|
         data[area] ||= {}
-        data[area][prefecture] = {
-          v0: read_cell(excel, sheet0, i, columns[:v0]),
-          v1: read_cell(excel, sheet0, i, columns[:v1]),
-          v2: read_cell(excel, sheet0, i, columns[:v2]),
-          v3: read_cell(excel, sheet1, i, columns[:v0]),
-          v4: read_cell(excel, sheet1, i, columns[:v1]),
-          v5: read_cell(excel, sheet1, i, columns[:v2]),
-          v0_: read_cell(excel, sheet0, i, columns[:v0_]),
-          v1_: read_cell(excel, sheet0, i, columns[:v1_]),
-          v2_: read_cell(excel, sheet0, i, columns[:v2_]),
-          v3_: read_cell(excel, sheet1, i, columns[:v0_]),
-          v4_: read_cell(excel, sheet1, i, columns[:v1_]),
-          v5_: read_cell(excel, sheet1, i, columns[:v2_]),
-        }
+        data[area][prefecture] = Measure.map_sheet_row(sheet0, sheet1, columns) do |sheet, column|
+          next nil unless sheet
+          next nil unless column
+
+          excel.sheet(sheet).cell(row, column).to_i
+        end
       end
     end
     data
