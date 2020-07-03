@@ -6,17 +6,8 @@ class Filler
     # "計"を追加
     data.each do |year, _|
       data[year].each do |month, _|
-        data[year][month].each do |area, d|
-          unless d["計"]
-            h = %i(v0 v1 v2 v3 v4 v5).map do |v|
-              if d.all? { |prefecture, x| x[v] }
-                [v, d.sum { |prefecture, x| x[v] }]
-              else
-                [v, nil]
-              end
-            end.to_h
-            d["計"] = h
-          end
+        data[year][month].each do |area, prefectures|
+          prefectures["計"] ||= Measure.sum(prefectures)
         end
       end
     end

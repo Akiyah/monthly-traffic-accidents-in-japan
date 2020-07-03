@@ -32,6 +32,13 @@ class Measure
     end
   end
 
+  def self.sum(prefectures)
+    self.map_to_h do |k, j|
+      next nil unless prefectures.all? { |prefecture, x| x[k] }
+      prefectures.sum { |prefecture, x| x[k] }
+    end
+  end
+
   def initialize(v0, v1, v2, v3, v4, v5, v0_, v1_, v2_, v3_, v4_, v5_)
     @v0 = v0
     @v1 = v1
