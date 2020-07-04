@@ -9,8 +9,9 @@ class Cacher
     data_ym = {}
     CSV.foreach("download/tsv/#{year}_#{month}.tsv", col_sep: "\t") do |row|
       year, month, area, prefecture, *v = row
+      m = Measure.a_to_h(v)
       data_ym[area] ||= {}
-      data_ym[area][prefecture] = Measure.a_to_h(v)
+      data_ym[area][prefecture] = m
     end
 
     data_ym

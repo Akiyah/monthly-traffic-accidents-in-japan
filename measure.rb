@@ -28,6 +28,8 @@ class Measure
       end
       column_key = %i(v0 v1 v2 v0 v1 v2 v0_ v1_ v2_ v0_ v1_ v2_)[j]
       column = columns[column_key]
+      next nil unless sheet
+      next nil unless column
       yield(sheet, column)
     end
   end
