@@ -48,6 +48,24 @@ class Measure
     m[:v2_] ||= m[:v5_] - m2[:v5_] if !m[:v2_] && m[:v5_] && m2[:v5_]
   end
 
+  def self.diff012345to_(v)
+    return nil unless %i(v0_ v1_ v2_ v3_ v4_ v5_).all? { |k| v[k] }
+    {
+      v0: v[:v0] - v[:v0_],
+      v1: v[:v1] - v[:v1_],
+      v2: v[:v2] - v[:v2_],
+      v3: v[:v3] - v[:v3_],
+      v4: v[:v4] - v[:v4_],
+      v5: v[:v5] - v[:v5_],
+      v0_: nil,
+      v1_: nil,
+      v2_: nil,
+      v3_: nil,
+      v4_: nil,
+      v5_: nil,
+    }
+  end
+
   def initialize(v0, v1, v2, v3, v4, v5, v0_, v1_, v2_, v3_, v4_, v5_)
     @v0 = v0
     @v1 = v1

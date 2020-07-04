@@ -34,24 +34,13 @@ class Filler
         if !(data[year - 1] && data[year - 1][month])
           data[year][month].dup.each do |area, _|
             data[year][month][area].dup.each do |prefecture, v|
-              if %i(v0_ v1_ v2_ v3_ v4_ v5_).all? { |k| v[k] }
+              m2 = Measure.diff012345to_(v)
+
+              if m2
                 data[year - 1] ||= {}
                 data[year - 1][month] ||= {}
                 data[year - 1][month][area] ||= {}
-                data[year - 1][month][area][prefecture] = {
-                  v0: v[:v0] - v[:v0_],
-                  v1: v[:v1] - v[:v1_],
-                  v2: v[:v2] - v[:v2_],
-                  v3: v[:v3] - v[:v3_],
-                  v4: v[:v4] - v[:v4_],
-                  v5: v[:v5] - v[:v5_],
-                  v0_: nil,
-                  v1_: nil,
-                  v2_: nil,
-                  v3_: nil,
-                  v4_: nil,
-                  v5_: nil,
-                }
+                data[year - 1][month][area][prefecture] = m2
               end
             end
           end
