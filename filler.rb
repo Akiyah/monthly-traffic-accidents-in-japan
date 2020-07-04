@@ -17,8 +17,8 @@ class Filler
     data.each do |year, _|
       data[year].each do |month, _|
         if data[year][month - 1]
-          data[year][month].each do |area, _|
-            data[year][month][area].each do |prefecture, m|
+        data[year][month].each do |area, _|
+          data[year][month][area].each do |prefecture, m|
               m2 = data[year][month - 1][area][prefecture]
               Measure.diff345to123(m, m2)
             end
@@ -32,8 +32,8 @@ class Filler
     data.dup.each do |year, _|
       data[year].dup.each do |month, _|
         if !(data[year - 1] && data[year - 1][month])
-          data[year][month].dup.each do |area, _|
-            data[year][month][area].dup.each do |prefecture, m|
+        data[year][month].dup.each do |area, _|
+          data[year][month][area].dup.each do |prefecture, m|
               m1 = Measure.diff012345to_(m)
 
               if m1
@@ -52,13 +52,13 @@ class Filler
     # 今月と再来月から来月の値を計算
     data.dup.each do |year, _|
       data[year].dup.each do |month, _|
-        if !data[year][month + 1] && data[year][month + 2]
-          data[year][month + 1] ||= {}
-          data[year][month].dup.each do |area, _|
-            data[year][month + 1][area] ||= {}
-            data[year][month][area].dup.each do |prefecture, m|
+        data[year][month].dup.each do |area, _|
+          data[year][month][area].dup.each do |prefecture, m|
+            if data[year][month + 2]
               m2 = data[year][month + 2][area][prefecture]
-              data[year][month + 1][area][prefecture] = Measure.create_next_month_from_this_month_and_next_next_month(m, m2)
+              data[year][month + 1] ||= {}
+              data[year][month + 1][area] ||= {}
+              data[year][month + 1][area][prefecture] ||= Measure.create_next_month_from_this_month_and_next_next_month(m, m2)
             end
           end
         end
