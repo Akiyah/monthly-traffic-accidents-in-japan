@@ -18,11 +18,9 @@ class Filler
       data[year].each do |month, _|
         if data[year][month - 1]
           data[year][month].each do |area, _|
-            data[year][month][area].each do |prefecture, v|
-              w = data[year][month - 1][area][prefecture]
-              v[:v0] ||= v[:v3] - w[:v3]
-              v[:v1] ||= v[:v4] - w[:v4]
-              v[:v2] ||= v[:v5] - w[:v5]
+            data[year][month][area].each do |prefecture, m|
+              m2 = data[year][month - 1][area][prefecture]
+              Measure.diff345to123(m, m2)
             end
           end
         end

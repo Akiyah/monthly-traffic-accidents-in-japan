@@ -39,6 +39,15 @@ class Measure
     end
   end
 
+  def self.diff345to123(m, m2)
+    m[:v0] ||= m[:v3] - m2[:v3] if !m[:v0] && m[:v3] && m2[:v3]
+    m[:v1] ||= m[:v4] - m2[:v4] if !m[:v1] && m[:v4] && m2[:v4]
+    m[:v2] ||= m[:v5] - m2[:v5] if !m[:v2] && m[:v5] && m2[:v5]
+    m[:v0_] ||= m[:v3_] - m2[:v3_] if !m[:v0_] && m[:v3_] && m2[:v3_]
+    m[:v1_] ||= m[:v4_] - m2[:v4_] if !m[:v1_] && m[:v4_] && m2[:v4_]
+    m[:v2_] ||= m[:v5_] - m2[:v5_] if !m[:v2_] && m[:v5_] && m2[:v5_]
+  end
+
   def initialize(v0, v1, v2, v3, v4, v5, v0_, v1_, v2_, v3_, v4_, v5_)
     @v0 = v0
     @v1 = v1
