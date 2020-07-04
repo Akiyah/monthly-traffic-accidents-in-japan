@@ -33,14 +33,14 @@ class Filler
       data[year].dup.each do |month, _|
         if !(data[year - 1] && data[year - 1][month])
           data[year][month].dup.each do |area, _|
-            data[year][month][area].dup.each do |prefecture, v|
-              m2 = Measure.diff012345to_(v)
+            data[year][month][area].dup.each do |prefecture, m|
+              m1 = Measure.diff012345to_(m)
 
-              if m2
+              if m1
                 data[year - 1] ||= {}
                 data[year - 1][month] ||= {}
                 data[year - 1][month][area] ||= {}
-                data[year - 1][month][area][prefecture] = m2
+                data[year - 1][month][area][prefecture] = m1
               end
             end
           end
@@ -56,28 +56,9 @@ class Filler
           data[year][month + 1] ||= {}
           data[year][month].dup.each do |area, _|
             data[year][month + 1][area] ||= {}
-            data[year][month][area].dup.each do |prefecture, v|
-              w = data[year][month + 2][area][prefecture]
-              v3 = w[:v3] - w[:v0]
-              v4 = w[:v4] - w[:v1]
-              v5 = w[:v5] - w[:v2]
-              v0 = v3 - v[:v3]
-              v1 = v4 - v[:v4]
-              v2 = v5 - v[:v5]
-              data[year][month + 1][area][prefecture] = {
-                v0: v0,
-                v1: v1,
-                v2: v2,
-                v3: v3,
-                v4: v4,
-                v5: v5,
-                v0_: nil,
-                v1_: nil,
-                v2_: nil,
-                v3_: nil,
-                v4_: nil,
-                v5_: nil,
-              }
+            data[year][month][area].dup.each do |prefecture, m|
+              m2 = data[year][month + 2][area][prefecture]
+              data[year][month + 1][area][prefecture] = Measure.create_next_month_from_this_month_and_next_next_month(m, m2)
             end
           end
         end

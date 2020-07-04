@@ -39,24 +39,48 @@ class Measure
     end
   end
 
-  def self.diff345to123(m, m2)
-    m[:v0] ||= m[:v3] - m2[:v3] if !m[:v0] && m[:v3] && m2[:v3]
-    m[:v1] ||= m[:v4] - m2[:v4] if !m[:v1] && m[:v4] && m2[:v4]
-    m[:v2] ||= m[:v5] - m2[:v5] if !m[:v2] && m[:v5] && m2[:v5]
-    m[:v0_] ||= m[:v3_] - m2[:v3_] if !m[:v0_] && m[:v3_] && m2[:v3_]
-    m[:v1_] ||= m[:v4_] - m2[:v4_] if !m[:v1_] && m[:v4_] && m2[:v4_]
-    m[:v2_] ||= m[:v5_] - m2[:v5_] if !m[:v2_] && m[:v5_] && m2[:v5_]
+  def self.diff345to123(m, m1)
+    m[:v0] ||= m[:v3] - m1[:v3] if !m[:v0] && m[:v3] && m1[:v3]
+    m[:v1] ||= m[:v4] - m1[:v4] if !m[:v1] && m[:v4] && m1[:v4]
+    m[:v2] ||= m[:v5] - m1[:v5] if !m[:v2] && m[:v5] && m1[:v5]
+    m[:v0_] ||= m[:v3_] - m1[:v3_] if !m[:v0_] && m[:v3_] && m1[:v3_]
+    m[:v1_] ||= m[:v4_] - m1[:v4_] if !m[:v1_] && m[:v4_] && m1[:v4_]
+    m[:v2_] ||= m[:v5_] - m1[:v5_] if !m[:v2_] && m[:v5_] && m1[:v5_]
   end
 
-  def self.diff012345to_(v)
-    return nil unless %i(v0_ v1_ v2_ v3_ v4_ v5_).all? { |k| v[k] }
+  def self.diff012345to_(m)
+    return nil unless %i(v0_ v1_ v2_ v3_ v4_ v5_).all? { |k| m[k] }
     {
-      v0: v[:v0] - v[:v0_],
-      v1: v[:v1] - v[:v1_],
-      v2: v[:v2] - v[:v2_],
-      v3: v[:v3] - v[:v3_],
-      v4: v[:v4] - v[:v4_],
-      v5: v[:v5] - v[:v5_],
+      v0: m[:v0] - m[:v0_],
+      v1: m[:v1] - m[:v1_],
+      v2: m[:v2] - m[:v2_],
+      v3: m[:v3] - m[:v3_],
+      v4: m[:v4] - m[:v4_],
+      v5: m[:v5] - m[:v5_],
+      v0_: nil,
+      v1_: nil,
+      v2_: nil,
+      v3_: nil,
+      v4_: nil,
+      v5_: nil,
+    }
+  end
+
+  def self.create_next_month_from_this_month_and_next_next_month(m, m2)
+    v3 = m2[:v3] - m2[:v0]
+    v4 = m2[:v4] - m2[:v1]
+    v5 = m2[:v5] - m2[:v2]
+    v0 = v3 - m[:v3]
+    v1 = v4 - m[:v4]
+    v2 = v5 - m[:v5]
+
+    {
+      v0: v0,
+      v1: v1,
+      v2: v2,
+      v3: v3,
+      v4: v4,
+      v5: v5,
       v0_: nil,
       v1_: nil,
       v2_: nil,
