@@ -35,6 +35,14 @@ class MeasureData
     end
   end
 
+  def each_ym(year, month)
+    @data[year][month].dup.each do |area, _|
+      @data[year][month][area].dup.each do |prefecture, m|
+        yield(area, prefecture, m)
+      end
+    end
+  end
+
   def each_year_month_area
     @data.dup.each do |year, _|
       @data[year].dup.each do |month, _|

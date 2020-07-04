@@ -17,17 +17,14 @@ class Reader
 
     sheet0, sheet1 = sheets
 
-    data_ym = {}
     area_prefecture_indexes.each do |area, prefectures|
       prefectures.each do |prefecture, row|
         m = Measure.map_sheet_row(sheet0, sheet1, columns) do |sheet, column|
           excel.sheet(sheet).cell(row, column).to_i
         end
-        data_ym[area] ||= {}
-        data_ym[area][prefecture] = m
+        yield(area, prefecture, m)
       end
     end
-    data_ym
   end
 end
 

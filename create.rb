@@ -19,15 +19,18 @@ PARAMS.each do |param|
   url = param[:url]
   format = param[:format]
 
-  data_ym = cacher.get(year, month)
-  unless data_ym
+  if cacher.exists?(year, month)
+    cacher.read(year, month) do |area, prefecture, m|
+      data.set(year, month, area, prefecture, m)
+    end
+  else
     filename = downloader.download(year, month, url)
     reader = Reader.create(format)
-    data_ym = reader.read(filename)
-    cacher.set(year, month, data_ym)
+    reader.read(filename) do |area, prefecture, m|
+      data.set(year, month, area, prefecture, m)
+    end
+    cacher.write(year, month, data)
   end
-
-  data.set_ym(year, month, data_ym)
 end
 
 Filler.new.fill(data)
