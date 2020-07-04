@@ -17,11 +17,11 @@ class Reader
 
     sheet0, sheet1 = sheets
 
-    data = {}
+    data_ym = {}
     area_prefecture_indexes.each do |area, prefectures|
       prefectures.each do |prefecture, row|
-        data[area] ||= {}
-        data[area][prefecture] = Measure.map_sheet_row(sheet0, sheet1, columns) do |sheet, column|
+        data_ym[area] ||= {}
+        data_ym[area][prefecture] = Measure.map_sheet_row(sheet0, sheet1, columns) do |sheet, column|
           next nil unless sheet
           next nil unless column
 
@@ -29,7 +29,7 @@ class Reader
         end
       end
     end
-    data
+    data_ym
   end
 end
 
