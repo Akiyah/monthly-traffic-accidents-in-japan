@@ -18,18 +18,11 @@ class MeasureData
     @data[year][month][area][prefecture] ||= m
   end
 
-  def set_ym(year, month, d)
-    @data[year] ||= {}
-    @data[year][month] ||= d
-  end
-
   def each
     @data.dup.each do |year, _|
       @data[year].dup.each do |month, _|
-        @data[year][month].dup.each do |area, _|
-          @data[year][month][area].dup.each do |prefecture, m|
-            yield(year, month, area, prefecture, m)
-          end
+        each_ym(year, month) do |area, prefecture, m|
+          yield(year, month, area, prefecture, m)
         end
       end
     end
