@@ -24,7 +24,7 @@ class Filler
     # 増減数から去年の値を計算
     data.each do |year, month, area, prefecture, h|
       h1 = Measure.diff012345to_(h)
-      if h1 && !(data.exists?(year - 1, month) && data.get(year - 1, month, area, prefecture))
+      if h1 && !data.get(year - 1, month, area, prefecture)
         data.set(year - 1, month, area, prefecture, h1)
       end
     end
