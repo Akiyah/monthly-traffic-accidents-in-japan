@@ -9,10 +9,6 @@ class Measure
     Measure.create_from_h(h).to_a
   end
 
-  def self.h_to_a3(h)
-    Measure.create_from_h(h).to_a3
-  end
-
   def self.map_to_h
     m = self.create_from_block do |k, i|
       yield(k, i)
@@ -22,7 +18,7 @@ class Measure
   end
 
   def self.map_sheet_row(sheet0, sheet1, columns)
-    m = self.create_from_block do |k, i|
+    self.create_from_block do |k, i|
       if %i(v0 v1 v2 v0_ v1_ v2_).include?(k)
         sheet = sheet0
       else
@@ -34,8 +30,6 @@ class Measure
       next nil unless column
       yield(sheet, column)
     end
-
-    m.to_h
   end
 
   def self.sum(prefectures)
@@ -101,10 +95,6 @@ class Measure
 
   def to_a
     [@v0, @v1, @v2, @v3, @v4, @v5, @v0_, @v1_, @v2_, @v3_, @v4_, @v5_]
-  end
-
-  def to_a3
-    [@v0, @v1, @v2]
   end
 
   def to_h
