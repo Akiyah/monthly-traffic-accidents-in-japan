@@ -9,14 +9,6 @@ class Measure
     Measure.create_from_h(h).to_a
   end
 
-  def self.map_to_h
-    m = self.create_from_block do |k, i|
-      yield(k, i)
-    end
-    
-    m.to_h
-  end
-
   def self.map_sheet_row(sheet0, sheet1, columns)
     self.create_from_block do |k, i|
       if %i(v0 v1 v2 v0_ v1_ v2_).include?(k)
@@ -33,35 +25,10 @@ class Measure
   end
 
   def self.sum(prefectures)
-    m = self.create_from_block do |k, i|
+    self.create_from_block do |k, i|
       next nil unless prefectures.all? { |prefecture, h| h[k] }
       prefectures.sum { |prefecture, h| h[k] }
     end
-    
-    m.to_h
-  end
-
-  def self.diff345to123(h, h1)
-    return h unless h1
-
-    m = Measure.create_from_h(h)
-    m1 = Measure.create_from_h(h1)
-
-    m2 = m.diff345to123(m1)
-    m2.to_h
-  end
-
-  def self.diff012345to_(h)
-    m = Measure.create_from_h(h)
-    m2 = m.diff012345to_
-    m2 ? m2.to_h : nil
-  end
-
-  def self.create_next_month_from_this_month_and_next_next_month(h, h2)
-    m = Measure.create_from_h(h)
-    m2 = Measure.create_from_h(h2)
-    m1 = m.create_next_month_from_next_next_month(m2)
-    m1.to_h
   end
 
   def self.create_from_h(h)
@@ -95,6 +62,10 @@ class Measure
 
   def to_a
     [@v0, @v1, @v2, @v3, @v4, @v5, @v0_, @v1_, @v2_, @v3_, @v4_, @v5_]
+  end
+
+  def empty?
+    to_a.all? { |v| !v }
   end
 
   def to_h
