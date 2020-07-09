@@ -22,7 +22,7 @@ class Reader
         m = Measure.map_sheet_row(sheet0, sheet1, columns) do |sheet, column|
           excel.sheet(sheet).cell(row, column).to_i
         end
-        yield(area, prefecture, m.to_h)
+        yield(area, prefecture, m)
       end
     end
   end

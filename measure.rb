@@ -26,8 +26,8 @@ class Measure
 
   def self.sum(prefectures)
     self.create_from_block do |k, i|
-      next nil unless prefectures.all? { |prefecture, h| h[k] }
-      prefectures.sum { |prefecture, h| h[k] }
+      next nil unless prefectures.all? { |prefecture, m| m.send(k) }
+      prefectures.sum { |prefecture, m| m.send(k) }
     end
   end
 
