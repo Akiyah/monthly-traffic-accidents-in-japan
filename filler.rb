@@ -34,11 +34,9 @@ class Filler
     # 今月と再来月から来月の値を計算
     data.each do |year, month, area, prefecture, m|
       m2 = data.get(year, month + 2, area, prefecture)
-      if m2
-        unless data.get(year, month + 1, area, prefecture)
-          m1 = m.create_next_month_from_next_next_month(m2)
-          data.set(year, month + 1, area, prefecture, m1)
-        end
+      if m2 && !data.get(year, month + 1, area, prefecture)
+        m1 = m.create_next_month_from_next_next_month(m2)
+        data.set(year, month + 1, area, prefecture, m1)
       end
     end
   end
