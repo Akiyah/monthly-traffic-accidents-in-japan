@@ -4,18 +4,18 @@ class MeasureData
   end
 
   def get(year, month, area, prefecture)
-    @data[year][month][area][prefecture]
+    @data.dig(year, month, area, prefecture)
   end
 
   def exists?(year, month)
-    @data[year][month]
+    @data.dig(year, month)
   end
 
   def set(year, month, area, prefecture, m)
     @data[year] ||= {}
     @data[year][month] ||= {}
     @data[year][month][area] ||= {}
-    @data[year][month][area][prefecture] ||= m
+    @data[year][month][area][prefecture] = m
   end
 
   def each

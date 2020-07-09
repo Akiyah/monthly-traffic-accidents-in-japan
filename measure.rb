@@ -1,109 +1,160 @@
 class Measure
-  def self.a_to_h(v)
-    self.map_to_h do |k, i|
-      v[i] ? v[i].to_i : nil
-    end
+  attr_accessor :v0, :v1, :v2, :v3, :v4, :v5, :v0_, :v1_, :v2_, :v3_, :v4_, :v5_
+
+  def self.a_to_h(a)
+    Measure.new(*a).to_h
   end
 
-  def self.h_to_a(v)
-    %i(v0 v1 v2 v3 v4 v5 v0_ v1_ v2_ v3_ v4_ v5_).map { |k| v[k] }
+  def self.h_to_a(h)
+    Measure.create_from_h(h).to_a
   end
 
-  def self.h_to_a3(v)
-    self.h_to_a(v)[0..2]
+  def self.h_to_a3(h)
+    Measure.create_from_h(h).to_a3
   end
 
   def self.map_to_h
-    %i(v0 v1 v2 v3 v4 v5 v0_ v1_ v2_ v3_ v4_ v5_).map.with_index do |k, i|
-      [k, yield(k, i)]
-    end.to_h
+    m = self.create_from_block do |k, i|
+      yield(k, i)
+    end
+    
+    m.to_h
   end
 
   def self.map_sheet_row(sheet0, sheet1, columns)
-    self.map_to_h do |k, j|
+    m = self.create_from_block do |k, i|
       if %i(v0 v1 v2 v0_ v1_ v2_).include?(k)
         sheet = sheet0
       else
         sheet = sheet1
       end
-      column_key = %i(v0 v1 v2 v0 v1 v2 v0_ v1_ v2_ v0_ v1_ v2_)[j]
+      column_key = %i(v0 v1 v2 v0 v1 v2 v0_ v1_ v2_ v0_ v1_ v2_)[i]
       column = columns[column_key]
       next nil unless sheet
       next nil unless column
       yield(sheet, column)
     end
+
+    m.to_h
   end
 
   def self.sum(prefectures)
-    self.map_to_h do |k, j|
-      next nil unless prefectures.all? { |prefecture, x| x[k] }
-      prefectures.sum { |prefecture, x| x[k] }
+    m = self.create_from_block do |k, i|
+      next nil unless prefectures.all? { |prefecture, h| h[k] }
+      prefectures.sum { |prefecture, h| h[k] }
+    end
+    
+    m.to_h
+  end
+
+  def self.diff345to123(h, h1)
+    return h unless h1
+
+    m = Measure.create_from_h(h)
+    m1 = Measure.create_from_h(h1)
+
+    m2 = m.diff345to123(m1)
+    m2.to_h
+  end
+
+  def self.diff012345to_(h)
+    m = Measure.create_from_h(h)
+    m2 = m.diff012345to_
+    m2 ? m2.to_h : nil
+  end
+
+  def self.create_next_month_from_this_month_and_next_next_month(h, h2)
+    m = Measure.create_from_h(h)
+    m2 = Measure.create_from_h(h2)
+    m1 = m.create_next_month_from_next_next_month(m2)
+    m1.to_h
+  end
+
+  def self.create_from_h(h)
+    self.create_from_block do |k, i|
+      h[k]
     end
   end
 
-  def self.diff345to123(m, m1)
-    m[:v0] ||= m[:v3] - m1[:v3] if !m[:v0] && m[:v3] && m1[:v3]
-    m[:v1] ||= m[:v4] - m1[:v4] if !m[:v1] && m[:v4] && m1[:v4]
-    m[:v2] ||= m[:v5] - m1[:v5] if !m[:v2] && m[:v5] && m1[:v5]
-    m[:v0_] ||= m[:v3_] - m1[:v3_] if !m[:v0_] && m[:v3_] && m1[:v3_]
-    m[:v1_] ||= m[:v4_] - m1[:v4_] if !m[:v1_] && m[:v4_] && m1[:v4_]
-    m[:v2_] ||= m[:v5_] - m1[:v5_] if !m[:v2_] && m[:v5_] && m1[:v5_]
+  def self.create_from_block
+    a = %i(v0 v1 v2 v3 v4 v5 v0_ v1_ v2_ v3_ v4_ v5_).map.with_index do |k, i|
+      yield(k, i)
+    end
+
+    Measure.new(*a)
   end
 
-  def self.diff012345to_(m)
-    return nil unless %i(v0_ v1_ v2_ v3_ v4_ v5_).all? { |k| m[k] }
+  def initialize(v0, v1, v2, v3, v4, v5, v0_=nil, v1_=nil, v2_=nil, v3_=nil, v4_=nil, v5_=nil)
+    @v0 = v0 ? v0.to_i : nil
+    @v1 = v1 ? v1.to_i : nil
+    @v2 = v2 ? v2.to_i : nil
+    @v3 = v3 ? v3.to_i : nil
+    @v4 = v4 ? v4.to_i : nil
+    @v5 = v5 ? v5.to_i : nil
+    @v0_ = v0_ ? v0_.to_i : nil
+    @v1_ = v1_ ? v1_.to_i : nil
+    @v2_ = v2_ ? v2_.to_i : nil
+    @v3_ = v3_ ? v3_.to_i : nil
+    @v4_ = v4_ ? v4_.to_i : nil
+    @v5_ = v5_ ? v5_.to_i : nil
+  end
+
+  def to_a
+    [@v0, @v1, @v2, @v3, @v4, @v5, @v0_, @v1_, @v2_, @v3_, @v4_, @v5_]
+  end
+
+  def to_a3
+    [@v0, @v1, @v2]
+  end
+
+  def to_h
     {
-      v0: m[:v0] - m[:v0_],
-      v1: m[:v1] - m[:v1_],
-      v2: m[:v2] - m[:v2_],
-      v3: m[:v3] - m[:v3_],
-      v4: m[:v4] - m[:v4_],
-      v5: m[:v5] - m[:v5_],
-      v0_: nil,
-      v1_: nil,
-      v2_: nil,
-      v3_: nil,
-      v4_: nil,
-      v5_: nil,
+      v0: @v0,
+      v1: @v1,
+      v2: @v2,
+      v3: @v3,
+      v4: @v4,
+      v5: @v5,
+      v0_: @v0_,
+      v1_: @v1_,
+      v2_: @v2_,
+      v3_: @v3_,
+      v4_: @v4_,
+      v5_: @v5_
     }
   end
 
-  def self.create_next_month_from_this_month_and_next_next_month(m, m2)
-    v3 = m2[:v3] - m2[:v0]
-    v4 = m2[:v4] - m2[:v1]
-    v5 = m2[:v5] - m2[:v2]
-    v0 = v3 - m[:v3]
-    v1 = v4 - m[:v4]
-    v2 = v5 - m[:v5]
-
-    {
-      v0: v0,
-      v1: v1,
-      v2: v2,
-      v3: v3,
-      v4: v4,
-      v5: v5,
-      v0_: nil,
-      v1_: nil,
-      v2_: nil,
-      v3_: nil,
-      v4_: nil,
-      v5_: nil,
-    }
+  def diff345to123(m1)
+    m2 = self.dup
+    m2.v0 ||= v3 - m1.v3 if !v0 && v3 && m1.v3
+    m2.v1 ||= v4 - m1.v4 if !v1 && v4 && m1.v4
+    m2.v2 ||= v5 - m1.v5 if !v2 && v5 && m1.v5
+    m2.v0_ ||= v3_ - m1.v3_ if !v0_ && v3_ && m1.v3_
+    m2.v1_ ||= v4_ - m1.v4_ if !v1_ && v4_ && m1.v4_
+    m2.v2_ ||= v5_ - m1.v5_ if !v2_ && v5_ && m1.v5_
+    m2
   end
 
-  def initialize(v0, v1, v2, v3, v4, v5, v0_, v1_, v2_, v3_, v4_, v5_)
-    @v0 = v0
-    @v1 = v1
-    @v2 = v2
-    @v3 = v3
-    @v4 = v4
-    @v5 = v5
-    @v0_ = v0_
-    @v1_ = v1_
-    @v2_ = v2_
-    @v3_ = v3_
-    @v4_ = v4_
-    @v5_ = v5_
+  def diff012345to_
+    return nil unless v0_ && v1_ && v2_ && v3_ && v4_ && v5_
+    Measure.new(
+      v0 - v0_,
+      v1 - v1_,
+      v2 - v2_,
+      v3 - v3_,
+      v4 - v4_,
+      v5 - v5_
+    )
+  end
+
+  def create_next_month_from_next_next_month(m2)
+    Measure.new(
+      m2.v3 - m2.v0 - v3,
+      m2.v4 - m2.v1 - v4,
+      m2.v5 - m2.v2 - v5,
+      m2.v3 - m2.v0,
+      m2.v4 - m2.v1,
+      m2.v5 - m2.v2
+    )
   end
 end
