@@ -7,7 +7,7 @@ require './reader.rb'
 require './downloader.rb'
 require './cacher.rb'
 require './filler.rb'
-require './measure.rb'
+require './compared_measures.rb'
 require './year_month_area_prefecture_data.rb'
 
 data = YearMonthAreaPrefectureData.new

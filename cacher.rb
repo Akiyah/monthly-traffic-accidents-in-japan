@@ -1,5 +1,5 @@
 require 'csv'
-require './measure.rb'
+require './compared_measures.rb'
 
 class Cacher
   def filename(year, month)
@@ -13,7 +13,7 @@ class Cacher
   def read(year, month)
     CSV.foreach(filename(year, month), col_sep: "\t") do |row|
       year, month, area, prefecture, *a = row
-      m = Measure.new(*a)
+      m = ComparedMeasures.new(*a)
       yield(area, prefecture, m)
     end
   end

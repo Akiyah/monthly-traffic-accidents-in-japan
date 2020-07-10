@@ -4,7 +4,7 @@ class Filler
     # "計"を追加
     data.each_year_month_area do |year, month, area, prefectures|
       unless prefectures["計"]
-        m_sum = Measure.sum(prefectures)
+        m_sum = ComparedMeasures.sum(prefectures)
         data.set(year, month, area, "計", m_sum)
       end
     end

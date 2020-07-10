@@ -1,4 +1,4 @@
-class Measure
+class ComparedMeasures
   attr_accessor :v0, :v1, :v2, :v3, :v4, :v5, :v0_, :v1_, :v2_, :v3_, :v4_, :v5_
 
   def self.map_sheet_row(sheet0, sheet1, columns)
@@ -28,7 +28,7 @@ class Measure
       yield(k, i)
     end
 
-    Measure.new(*a)
+    ComparedMeasures.new(*a)
   end
 
   def initialize(v0, v1, v2, v3, v4, v5, v0_=nil, v1_=nil, v2_=nil, v3_=nil, v4_=nil, v5_=nil)
@@ -84,7 +84,7 @@ class Measure
 
   def diff012345to_
     return nil unless v0_ && v1_ && v2_ && v3_ && v4_ && v5_
-    Measure.new(
+    ComparedMeasures.new(
       v0 - v0_,
       v1 - v1_,
       v2 - v2_,
@@ -95,7 +95,7 @@ class Measure
   end
 
   def create_next_month_from_next_next_month(m2)
-    Measure.new(
+    ComparedMeasures.new(
       m2.v3 - m2.v0 - v3,
       m2.v4 - m2.v1 - v4,
       m2.v5 - m2.v2 - v5,

@@ -19,7 +19,7 @@ class Reader
 
     area_prefecture_indexes.each do |area, prefectures|
       prefectures.each do |prefecture, row|
-        m = Measure.map_sheet_row(sheet0, sheet1, columns) do |sheet, column|
+        m = ComparedMeasures.map_sheet_row(sheet0, sheet1, columns) do |sheet, column|
           excel.sheet(sheet).cell(row, column).to_i
         end
         yield(area, prefecture, m)
