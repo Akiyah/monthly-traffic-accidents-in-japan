@@ -1,14 +1,6 @@
 class Measure
   attr_accessor :v0, :v1, :v2, :v3, :v4, :v5, :v0_, :v1_, :v2_, :v3_, :v4_, :v5_
 
-  def self.a_to_h(a)
-    Measure.new(*a).to_h
-  end
-
-  def self.h_to_a(h)
-    Measure.create_from_h(h).to_a
-  end
-
   def self.map_sheet_row(sheet0, sheet1, columns)
     self.create_from_block do |k, i|
       if %i(v0 v1 v2 v0_ v1_ v2_).include?(k)
@@ -28,12 +20,6 @@ class Measure
     self.create_from_block do |k, i|
       next nil unless prefectures.all? { |prefecture, m| m.send(k) }
       prefectures.sum { |prefecture, m| m.send(k) }
-    end
-  end
-
-  def self.create_from_h(h)
-    self.create_from_block do |k, i|
-      h[k]
     end
   end
 
