@@ -26,6 +26,3 @@ class Downloader
     end
   end
 end
-
-
-

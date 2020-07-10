@@ -1,4 +1,4 @@
-class MeasureData
+class YearMonthAreaPrefectureData
   def initialize
     @data = {}
   end

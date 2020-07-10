@@ -8,9 +8,9 @@ require './downloader.rb'
 require './cacher.rb'
 require './filler.rb'
 require './measure.rb'
-require './measure_data.rb'
+require './year_month_area_prefecture_data.rb'
 
-data = MeasureData.new
+data = YearMonthAreaPrefectureData.new
 downloader = Downloader.new
 cacher = Cacher.new
 PARAMS.each do |param|
