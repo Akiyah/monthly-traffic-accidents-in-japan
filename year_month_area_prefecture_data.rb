@@ -7,10 +7,6 @@ class YearMonthAreaPrefectureData
     @data.dig(year, month, area, prefecture)
   end
 
-  def exists?(year, month)
-    @data.dig(year, month)
-  end
-
   def set(year, month, area, prefecture, m)
     @data[year] ||= {}
     @data[year][month] ||= {}
