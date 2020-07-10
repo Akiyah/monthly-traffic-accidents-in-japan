@@ -13,8 +13,8 @@ class Cacher
   def read(year, month)
     CSV.foreach(filename(year, month), col_sep: "\t") do |row|
       year, month, area, prefecture, *a = row
-      m = ComparedMeasures.new(*a)
-      yield(area, prefecture, m)
+      cm = ComparedMeasures.new(*a)
+      yield(area, prefecture, cm)
     end
   end
 
@@ -23,8 +23,8 @@ class Cacher
     Dir.mkdir('download/tsv') unless Dir.exist?('download/tsv')
 
     CSV.open(filename(year, month), 'w', col_sep: "\t") do |tsv|
-      data.each_ym(year, month) do |area, prefecture, m|
-        tsv << [year, month, area, prefecture] + m.to_a
+      data.each_ym(year, month) do |area, prefecture, cm|
+        tsv << [year, month, area, prefecture] + cm.to_a
       end
     end
   end

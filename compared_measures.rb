@@ -71,15 +71,15 @@ class ComparedMeasures
     }
   end
 
-  def diff345to123(m1)
-    m2 = self.dup
-    m2.v0 ||= v3 - m1.v3 if !v0 && v3 && m1.v3
-    m2.v1 ||= v4 - m1.v4 if !v1 && v4 && m1.v4
-    m2.v2 ||= v5 - m1.v5 if !v2 && v5 && m1.v5
-    m2.v0_ ||= v3_ - m1.v3_ if !v0_ && v3_ && m1.v3_
-    m2.v1_ ||= v4_ - m1.v4_ if !v1_ && v4_ && m1.v4_
-    m2.v2_ ||= v5_ - m1.v5_ if !v2_ && v5_ && m1.v5_
-    m2
+  def diff345to123(cm1)
+    cm2 = self.dup
+    cm2.v0 ||= v3 - cm1.v3 if !v0 && v3 && cm1.v3
+    cm2.v1 ||= v4 - cm1.v4 if !v1 && v4 && cm1.v4
+    cm2.v2 ||= v5 - cm1.v5 if !v2 && v5 && cm1.v5
+    cm2.v0_ ||= v3_ - cm1.v3_ if !v0_ && v3_ && cm1.v3_
+    cm2.v1_ ||= v4_ - cm1.v4_ if !v1_ && v4_ && cm1.v4_
+    cm2.v2_ ||= v5_ - cm1.v5_ if !v2_ && v5_ && cm1.v5_
+    cm2
   end
 
   def diff012345to_
@@ -94,14 +94,14 @@ class ComparedMeasures
     )
   end
 
-  def create_next_month_from_next_next_month(m2)
+  def create_next_month_from_next_next_month(cm2)
     ComparedMeasures.new(
-      m2.v3 - m2.v0 - v3,
-      m2.v4 - m2.v1 - v4,
-      m2.v5 - m2.v2 - v5,
-      m2.v3 - m2.v0,
-      m2.v4 - m2.v1,
-      m2.v5 - m2.v2
+      cm2.v3 - cm2.v0 - v3,
+      cm2.v4 - cm2.v1 - v4,
+      cm2.v5 - cm2.v2 - v5,
+      cm2.v3 - cm2.v0,
+      cm2.v4 - cm2.v1,
+      cm2.v5 - cm2.v2
     )
   end
 end
