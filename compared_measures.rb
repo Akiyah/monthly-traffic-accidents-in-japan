@@ -8,9 +8,19 @@ class ComparedMeasures
   attr_accessor :measures_change_in_year
 
   def self.map_sheet_row(sheet_in_month, sheet_in_year, columns)
-    self.create_from_block do |k|
-      sheet =  ([:measures, :measures_change].include?(k[0]) ? sheet_in_month : sheet_in_year)
-      column = columns[k[1]][k[2]]
+    self.create_from_block do |measures_key, v_key|
+      if [:measures, :measures_change].include?(measures_key)
+        sheet = sheet_in_month
+      else
+        sheet = sheet_in_year
+      end
+
+      if [:measures, :measures_in_year].include?(measures_key)
+        column = columns[:measures][v_key]
+      else
+        column = columns[:measures_change][v_key]
+      end
+
       next nil unless sheet
       next nil unless column
       yield(sheet, column)
@@ -18,28 +28,30 @@ class ComparedMeasures
   end
 
   def self.sum(prefectures)
-    self.create_from_block do |k|
-      next nil unless prefectures.all? { |prefecture, m| m.send(k[0]).send(k[2]) }
-      prefectures.sum { |prefecture, m| m.send(k[0]).send(k[2]) }
+    self.create_from_block do |measures_key, v_key|
+      next nil unless prefectures.all? { |prefecture, m| m.send(measures_key).send(v_key) }
+      prefectures.sum { |prefecture, m| m.send(measures_key).send(v_key) }
     end
   end
 
   def self.create_from_block
     a = [
-      [:measures, :measures, :v0],
-      [:measures, :measures, :v1],
-      [:measures, :measures, :v2],
-      [:measures_in_year, :measures, :v0],
-      [:measures_in_year, :measures, :v1],
-      [:measures_in_year, :measures, :v2],
-      [:measures_change, :measures_change, :v0],
-      [:measures_change, :measures_change, :v1],
-      [:measures_change, :measures_change, :v2],
-      [:measures_change_in_year, :measures_change, :v0],
-      [:measures_change_in_year, :measures_change, :v1],
-      [:measures_change_in_year, :measures_change, :v2]
-    ].map do |k|
-      yield(k)
+      [:measures, :v0],
+      [:measures, :v1],
+      [:measures, :v2],
+      [:measures_in_year, :v0],
+      [:measures_in_year, :v1],
+      [:measures_in_year, :v2],
+      [:measures_change, :v0],
+      [:measures_change, :v1],
+      [:measures_change, :v2],
+      [:measures_change_in_year, :v0],
+      [:measures_change_in_year, :v1],
+      [:measures_change_in_year, :v2]
+    ].map do |measures_key, v_key|
+      #[:v0, :v1, :v2].map do |k|
+        yield(measures_key, v_key)
+      #end
     end
 
     ComparedMeasures.new(*a)
