@@ -8,6 +8,7 @@ class YearMonthAreaPrefectureData
   end
 
   def set(year, month, area, prefecture, m)
+    return unless m
     @data[year] ||= {}
     @data[year][month] ||= {}
     @data[year][month][area] ||= {}
@@ -15,11 +16,9 @@ class YearMonthAreaPrefectureData
   end
 
   def set_if_nil(year, month, area, prefecture, m)
-    return unless m
-    @data[year] ||= {}
-    @data[year][month] ||= {}
-    @data[year][month][area] ||= {}
-    @data[year][month][area][prefecture] ||= m
+    unless get(year, month, area, prefecture)
+      set(year, month, area, prefecture, m)
+    end
   end
 
   def each
