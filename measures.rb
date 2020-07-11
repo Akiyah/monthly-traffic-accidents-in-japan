@@ -1,22 +1,22 @@
 class Measures
-  attr_reader :v0, :v1, :v2
+  attr_reader :accidents, :fatalities, :injuries
 
   def self.create_from_block
-    v0 = yield(:v0)
-    v1 = yield(:v1)
-    v2 = yield(:v2)
+    accidents = yield(:accidents)
+    fatalities = yield(:fatalities)
+    injuries = yield(:injuries)
 
-    Measures.new(v0, v1, v2)
+    Measures.new(accidents, fatalities, injuries)
   end
 
-  def initialize(v0 = nil, v1 = nil, v2 = nil)
-    @v0 = v0 ? v0.to_i : nil
-    @v1 = v1 ? v1.to_i : nil
-    @v2 = v2 ? v2.to_i : nil
+  def initialize(accidents = nil, fatalities = nil, injuries = nil)
+    @accidents = accidents&.to_i
+    @fatalities = fatalities&.to_i
+    @injuries = injuries&.to_i
   end
 
   def to_a
-    [@v0, @v1, @v2]
+    [@accidents, @fatalities, @injuries]
   end
 
   def empty?
@@ -25,6 +25,10 @@ class Measures
 
   def -(m1)
     return nil if !m1 || empty? || m1.empty?
-    Measures.new(@v0 - m1.v0, @v1 - m1.v1, @v2 - m1.v2)
+    Measures.new(
+      @accidents - m1.accidents,
+      @fatalities - m1.fatalities,
+      @injuries - m1.injuries
+    )
   end
 end
