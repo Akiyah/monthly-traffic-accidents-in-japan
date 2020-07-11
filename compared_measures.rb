@@ -50,7 +50,7 @@ class ComparedMeasures
       yield(:measures_change_in_year, v_key)
     end
 
-    ComparedMeasures.create_by_measures(
+    ComparedMeasures.new(
       measures,
       measures_in_year,
       measures_change,
@@ -61,7 +61,7 @@ class ComparedMeasures
   def self.create_from_a(a)
     v0, v1, v2, v3, v4, v5, v0_, v1_, v2_, v3_, v4_, v5_ = a
 
-    ComparedMeasures.create_by_measures(
+    ComparedMeasures.new(
       Measures.new(v0, v1, v2),
       Measures.new(v3, v4, v5),
       Measures.new(v0_, v1_, v2_),
@@ -69,13 +69,11 @@ class ComparedMeasures
     )
   end
 
-  def self.create_by_measures(measures, measures_in_year, measures_change = Measures.new(nil, nil, nil), measures_change_in_year = Measures.new(nil, nil, nil))
-    cm = ComparedMeasures.new
-    cm.measures = measures
-    cm.measures_in_year = measures_in_year
-    cm.measures_change = measures_change
-    cm.measures_change_in_year = measures_change_in_year
-    cm
+  def initialize(measures, measures_in_year, measures_change = nil, measures_change_in_year = nil)
+    @measures = measures
+    @measures_in_year = measures_in_year
+    @measures_change = measures_change || Measures.new(nil, nil, nil)
+    @measures_change_in_year = measures_change_in_year || Measures.new(nil, nil, nil)
   end
 
   def to_a
@@ -96,14 +94,14 @@ class ComparedMeasures
   def diff012345to_
     return nil if @measures_change.empty? || @measures_change_in_year.empty?
 
-    ComparedMeasures.create_by_measures(
+    ComparedMeasures.new(
       @measures.diff(@measures_change),
       @measures_in_year.diff(@measures_change_in_year)
     )
   end
 
   def create_next_month_from_next_next_month(cm2)
-    ComparedMeasures.create_by_measures(
+    ComparedMeasures.new(
       cm2.measures_in_year.diff(cm2.measures).diff(measures_in_year),
       cm2.measures_in_year.diff(cm2.measures)
     )

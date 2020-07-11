@@ -14,6 +14,14 @@ class YearMonthAreaPrefectureData
     @data[year][month][area][prefecture] = m
   end
 
+  def set_if_nil(year, month, area, prefecture, m)
+    return unless m
+    @data[year] ||= {}
+    @data[year][month] ||= {}
+    @data[year][month][area] ||= {}
+    @data[year][month][area][prefecture] ||= m
+  end
+
   def each
     @data.dup.each do |year, _|
       @data[year].dup.each do |month, _|
