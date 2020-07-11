@@ -1,6 +1,14 @@
 class Measures
   attr_reader :v0, :v1, :v2
 
+  def self.create_from_block
+    v0 = yield(:v0)
+    v1 = yield(:v1)
+    v2 = yield(:v2)
+
+    Measures.new(v0, v1, v2)
+  end
+
   def initialize(v0 = nil, v1 = nil, v2 = nil)
     @v0 = v0 ? v0.to_i : nil
     @v1 = v1 ? v1.to_i : nil

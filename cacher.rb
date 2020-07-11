@@ -13,7 +13,7 @@ class Cacher
   def read(year, month)
     CSV.foreach(filename(year, month), col_sep: "\t") do |row|
       year, month, area, prefecture, *a = row
-      cm = ComparedMeasures.new(*a)
+      cm = ComparedMeasures.create_from_a(a)
       yield(area, prefecture, cm)
     end
   end

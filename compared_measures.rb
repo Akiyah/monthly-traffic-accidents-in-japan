@@ -1,7 +1,6 @@
 require './measures.rb'
 
 class ComparedMeasures
-  attr_accessor :v0, :v1, :v2, :v3, :v4, :v5, :v0_, :v1_, :v2_, :v3_, :v4_, :v5_
   attr_accessor :measures
   attr_accessor :measures_in_year
   attr_accessor :measures_change
@@ -35,68 +34,48 @@ class ComparedMeasures
   end
 
   def self.create_from_block
-    a = [
-      :measures,
-      :measures_in_year,
-      :measures_change,
-      :measures_change_in_year,
-    ].map do |measures_key|
-      [:v0, :v1, :v2].map do |v_key|
-        yield(measures_key, v_key)
-      end
-    end.flatten
+    measures = Measures.create_from_block do |v_key|
+      yield(:measures, v_key)
+    end
 
-    ComparedMeasures.new(*a)
+    measures_in_year = Measures.create_from_block do |v_key|
+      yield(:measures_in_year, v_key)
+    end
+
+    measures_change = Measures.create_from_block do |v_key|
+      yield(:measures_change, v_key)
+    end
+
+    measures_change_in_year = Measures.create_from_block do |v_key|
+      yield(:measures_change_in_year, v_key)
+    end
+
+    ComparedMeasures.create_by_measures(
+      measures,
+      measures_in_year,
+      measures_change,
+      measures_change_in_year
+    )
   end
 
-  def initialize(v0, v1, v2, v3, v4, v5, v0_=nil, v1_=nil, v2_=nil, v3_=nil, v4_=nil, v5_=nil)
-    @v0 = v0 ? v0.to_i : nil
-    @v1 = v1 ? v1.to_i : nil
-    @v2 = v2 ? v2.to_i : nil
-    @v3 = v3 ? v3.to_i : nil
-    @v4 = v4 ? v4.to_i : nil
-    @v5 = v5 ? v5.to_i : nil
-    @v0_ = v0_ ? v0_.to_i : nil
-    @v1_ = v1_ ? v1_.to_i : nil
-    @v2_ = v2_ ? v2_.to_i : nil
-    @v3_ = v3_ ? v3_.to_i : nil
-    @v4_ = v4_ ? v4_.to_i : nil
-    @v5_ = v5_ ? v5_.to_i : nil
+  def self.create_from_a(a)
+    v0, v1, v2, v3, v4, v5, v0_, v1_, v2_, v3_, v4_, v5_ = a
 
-    initialize_measures
-  end
-
-  def initialize_measures
-    @measures = Measures.new(v0, v1, v2)
-    @measures_in_year = Measures.new(v3, v4, v5)
-    @measures_change = Measures.new(v0_, v1_, v2_)
-    @measures_change_in_year = Measures.new(v3_, v4_, v5_)
+    ComparedMeasures.create_by_measures(
+      Measures.new(v0, v1, v2),
+      Measures.new(v3, v4, v5),
+      Measures.new(v0_, v1_, v2_),
+      Measures.new(v3_, v4_, v5_)
+    )
   end
 
   def self.create_by_measures(measures, measures_in_year, measures_change = Measures.new(nil, nil, nil), measures_change_in_year = Measures.new(nil, nil, nil))
-    cm = ComparedMeasures.new(nil, nil, nil, nil, nil, nil)
+    cm = ComparedMeasures.new
     cm.measures = measures
     cm.measures_in_year = measures_in_year
     cm.measures_change = measures_change
     cm.measures_change_in_year = measures_change_in_year
-
-    cm.initialize_vs
     cm
-  end
-
-  def initialize_vs
-    @v0 = @measures.v0
-    @v1 = @measures.v1
-    @v2 = @measures.v2
-    @v3 = @measures_in_year.v0
-    @v4 = @measures_in_year.v1
-    @v5 = @measures_in_year.v2
-    @v0_ = @measures_change.v0
-    @v1_ = @measures_change.v1
-    @v2_ = @measures_change.v2
-    @v3_ = @measures_change_in_year.v0
-    @v4_ = @measures_change_in_year.v1
-    @v5_ = @measures_change_in_year.v2
   end
 
   def to_a
@@ -111,7 +90,6 @@ class ComparedMeasures
     if cm2.measures_change.empty? && !cm2.measures_change_in_year.empty? && !cm1.measures_change_in_year.empty?
       cm2.measures_change = cm2.measures_change_in_year.diff(cm1.measures_change_in_year)
     end
-    cm2.initialize_vs
     cm2
   end
 

@@ -12,7 +12,7 @@ class Filler
     puts "fill(2)"
     # 今月の月末と前月の月末から今月の月中を計算
     data.each do |year, month, area, prefecture, cm|
-      next if cm.v0 && cm.v1 && cm.v2 && cm.v0_ && cm.v1_ && cm.v2_
+      next if !cm.measures.empty? && !cm.measures_change.empty?
 
       if data.get(year, month - 1, area, prefecture)
         cm1 = data.get(year, month - 1, area, prefecture)
