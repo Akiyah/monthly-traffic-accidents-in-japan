@@ -23,7 +23,7 @@ class Measures
     to_a.any? { |v| !v }
   end
 
-  def diff(m1)
+  def -(m1)
     return nil if !m1 || empty? || m1.empty?
     Measures.new(@v0 - m1.v0, @v1 - m1.v1, @v2 - m1.v2)
   end

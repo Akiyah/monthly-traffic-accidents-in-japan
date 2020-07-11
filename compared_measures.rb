@@ -83,10 +83,10 @@ class ComparedMeasures
   def diff345to123(cm1)
     cm2 = self.dup
     if cm2.measures.empty? && !cm2.measures_in_year.empty? && !cm1.measures_in_year.empty?
-      cm2.measures = cm2.measures_in_year.diff(cm1.measures_in_year)
+      cm2.measures = cm2.measures_in_year - cm1.measures_in_year
     end
     if cm2.measures_change.empty? && !cm2.measures_change_in_year.empty? && !cm1.measures_change_in_year.empty?
-      cm2.measures_change = cm2.measures_change_in_year.diff(cm1.measures_change_in_year)
+      cm2.measures_change = cm2.measures_change_in_year - cm1.measures_change_in_year
     end
     cm2
   end
@@ -95,15 +95,15 @@ class ComparedMeasures
     return nil if @measures_change.empty? || @measures_change_in_year.empty?
 
     ComparedMeasures.new(
-      @measures.diff(@measures_change),
-      @measures_in_year.diff(@measures_change_in_year)
+      @measures - @measures_change,
+      @measures_in_year - @measures_change_in_year
     )
   end
 
   def create_next_month_from_next_next_month(cm2)
     ComparedMeasures.new(
-      cm2.measures_in_year.diff(cm2.measures).diff(measures_in_year),
-      cm2.measures_in_year.diff(cm2.measures)
+      cm2.measures_in_year - cm2.measures - measures_in_year,
+      cm2.measures_in_year - cm2.measures
     )
   end
 end
