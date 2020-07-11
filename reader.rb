@@ -15,11 +15,11 @@ class Reader
       excel = Roo::Excel.new(filename)
     end
 
-    sheet0, sheet1 = sheets
+    sheet_in_month, sheet_in_year = sheets
 
     area_prefecture_indexes.each do |area, prefectures|
       prefectures.each do |prefecture, row|
-        cm = ComparedMeasures.map_sheet_row(sheet0, sheet1, columns) do |sheet, column|
+        cm = ComparedMeasures.map_sheet_row(sheet_in_month, sheet_in_year, columns) do |sheet, column|
           excel.sheet(sheet).cell(row, column).to_i
         end
         yield(area, prefecture, cm)
@@ -35,12 +35,16 @@ class ReaderA < Reader
 
   def columns
     {
-      v0: 'C',
-      v1: 'F',
-      v2: 'J',
-      v0_: 'D',
-      v1_: 'G',
-      v2_: 'K',
+      mesures: {
+        v0: 'C',
+        v1: 'F',
+        v2: 'J'
+      },
+      mesures_change: {
+        v0: 'D',
+        v1: 'G',
+        v2: 'K'
+      }
     }
   end
 end
@@ -76,12 +80,16 @@ class ReaderB < Reader
 
   def columns
     {
-      v0: 'I',
-      v1: 'J',
-      v2: 'K',
-      v0_: nil,
-      v1_: nil,
-      v2_: nil,
+      mesures: {
+        v0: 'I',
+        v1: 'J',
+        v2: 'K'
+      },
+      mesures_change: {
+        v0: nil,
+        v1: nil,
+        v2: nil
+      }
     }
   end
 end

@@ -7,15 +7,10 @@ class ComparedMeasures
   attr_accessor :measures_change
   attr_accessor :measures_change_in_year
 
-  def self.map_sheet_row(sheet0, sheet1, columns)
-    self.create_from_block do |k, i|
-      if %i(v0 v1 v2 v0_ v1_ v2_).include?(k)
-        sheet = sheet0
-      else
-        sheet = sheet1
-      end
-      column_key = %i(v0 v1 v2 v0 v1 v2 v0_ v1_ v2_ v0_ v1_ v2_)[i]
-      column = columns[column_key]
+  def self.map_sheet_row(sheet_in_month, sheet_in_year, columns)
+    self.create_from_block do |k|
+      sheet =  ([:measures, :measures_change].include?(k[0]) ? sheet_in_month : sheet_in_year)
+      column = columns[k[1]][k[2]]
       next nil unless sheet
       next nil unless column
       yield(sheet, column)
@@ -23,15 +18,28 @@ class ComparedMeasures
   end
 
   def self.sum(prefectures)
-    self.create_from_block do |k, i|
-      next nil unless prefectures.all? { |prefecture, m| m.send(k) }
-      prefectures.sum { |prefecture, m| m.send(k) }
+    self.create_from_block do |k|
+      next nil unless prefectures.all? { |prefecture, m| m.send(k[0]).send(k[2]) }
+      prefectures.sum { |prefecture, m| m.send(k[0]).send(k[2]) }
     end
   end
 
   def self.create_from_block
-    a = %i(v0 v1 v2 v3 v4 v5 v0_ v1_ v2_ v3_ v4_ v5_).map.with_index do |k, i|
-      yield(k, i)
+    a = [
+      [:measures, :measures, :v0],
+      [:measures, :measures, :v1],
+      [:measures, :measures, :v2],
+      [:measures_in_year, :measures, :v0],
+      [:measures_in_year, :measures, :v1],
+      [:measures_in_year, :measures, :v2],
+      [:measures_change, :measures_change, :v0],
+      [:measures_change, :measures_change, :v1],
+      [:measures_change, :measures_change, :v2],
+      [:measures_change_in_year, :measures_change, :v0],
+      [:measures_change_in_year, :measures_change, :v1],
+      [:measures_change_in_year, :measures_change, :v2]
+    ].map do |k|
+      yield(k)
     end
 
     ComparedMeasures.new(*a)
@@ -61,6 +69,21 @@ class ComparedMeasures
     @measures_change_in_year = Measures.new(v3_, v4_, v5_)
   end
 
+  def initialize_vs
+    @v0 = @measures.v0
+    @v1 = @measures.v1
+    @v2 = @measures.v2
+    @v3 = @measures_in_year.v0
+    @v4 = @measures_in_year.v1
+    @v5 = @measures_in_year.v2
+    @v0_ = @measures_change.v0
+    @v1_ = @measures_change.v1
+    @v2_ = @measures_change.v2
+    @v3_ = @measures_change_in_year.v0
+    @v4_ = @measures_change_in_year.v1
+    @v5_ = @measures_change_in_year.v2
+  end
+
   def to_a
     @measures.to_a + @measures_in_year.to_a + @measures_change.to_a + @measures_change_in_year.to_a
   end
@@ -83,13 +106,13 @@ class ComparedMeasures
 
   def diff345to123(cm1)
     cm2 = self.dup
-    cm2.v0 ||= v3 - cm1.v3 if !v0 && v3 && cm1.v3
-    cm2.v1 ||= v4 - cm1.v4 if !v1 && v4 && cm1.v4
-    cm2.v2 ||= v5 - cm1.v5 if !v2 && v5 && cm1.v5
-    cm2.v0_ ||= v3_ - cm1.v3_ if !v0_ && v3_ && cm1.v3_
-    cm2.v1_ ||= v4_ - cm1.v4_ if !v1_ && v4_ && cm1.v4_
-    cm2.v2_ ||= v5_ - cm1.v5_ if !v2_ && v5_ && cm1.v5_
-    cm2.initialize_measures
+    if cm2.measures.empty? && !cm2.measures_in_year.empty? && !cm1.measures_in_year.empty?
+      cm2.measures = cm2.measures_in_year.diff(cm1.measures_in_year)
+    end
+    if cm2.measures_change.empty? && !cm2.measures_change_in_year.empty? && !cm1.measures_change_in_year.empty?
+      cm2.measures_change = cm2.measures_change_in_year.diff(cm1.measures_change_in_year)
+    end
+    cm2.initialize_vs
     cm2
   end
 
