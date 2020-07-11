@@ -80,7 +80,7 @@ class ComparedMeasures
     @measures.to_a + @measures_in_year.to_a + @measures_change.to_a + @measures_change_in_year.to_a
   end
 
-  def diff345to123(cm1)
+  def fill_measures(cm1)
     cm2 = self.dup
     if cm2.measures.empty? && !cm2.measures_in_year.empty? && !cm1.measures_in_year.empty?
       cm2.measures = cm2.measures_in_year - cm1.measures_in_year
@@ -91,7 +91,7 @@ class ComparedMeasures
     cm2
   end
 
-  def diff012345to_
+  def last_year
     return nil if @measures_change.empty? || @measures_change_in_year.empty?
 
     ComparedMeasures.new(
@@ -100,10 +100,10 @@ class ComparedMeasures
     )
   end
 
-  def create_next_month_from_next_next_month(cm2)
+  def next_month(cm_next_next_month)
     ComparedMeasures.new(
-      cm2.measures_in_year - cm2.measures - measures_in_year,
-      cm2.measures_in_year - cm2.measures
+      cm_next_next_month.measures_in_year - cm_next_next_month.measures - measures_in_year,
+      cm_next_next_month.measures_in_year - cm_next_next_month.measures
     )
   end
 end

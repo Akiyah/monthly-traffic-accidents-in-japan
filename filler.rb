@@ -3,10 +3,10 @@ class Filler
     puts "fill(1)"
     # "計"を追加
     data.each_year_month_area do |year, month, area, prefectures|
-      unless prefectures["計"]
+      #unless prefectures["計"]
         cm_sum = ComparedMeasures.sum(prefectures)
-        data.set(year, month, area, "計", cm_sum)
-      end
+        data.set_if_nil(year, month, area, "計", cm_sum)
+      #end
     end
 
     puts "fill(2)"
@@ -16,7 +16,7 @@ class Filler
 
       cm_last_month = data.get(year, month - 1, area, prefecture)
       if cm_last_month
-        cm_new = cm.diff345to123(cm_last_month)
+        cm_new = cm.fill_measures(cm_last_month)
         data.set(year, month, area, prefecture, cm_new)
       end
     end
@@ -24,8 +24,7 @@ class Filler
     puts "fill(3)"
     # 増減数から去年の値を計算
     data.each do |year, month, area, prefecture, cm|
-      cm1 = cm.diff012345to_
-      data.set_if_nil(year - 1, month, area, prefecture, cm1)
+      data.set_if_nil(year - 1, month, area, prefecture, cm.last_year)
     end
 
     puts "fill(4)"
@@ -33,7 +32,7 @@ class Filler
     data.each do |year, month, area, prefecture, cm|
       cm_next_next_month = data.get(year, month + 2, area, prefecture)
       if cm_next_next_month
-        cm_next_month = cm.create_next_month_from_next_next_month(cm_next_next_month)
+        cm_next_month = cm.next_month(cm_next_next_month)
         data.set_if_nil(year, month + 1, area, prefecture, cm_next_month)
       end
     end
