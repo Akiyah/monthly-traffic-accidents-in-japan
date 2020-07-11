@@ -103,22 +103,6 @@ class ComparedMeasures
     @measures.to_a + @measures_in_year.to_a + @measures_change.to_a + @measures_change_in_year.to_a
   end
 
-  def to_h
-    @measures.to_h.merge(
-      {
-        v3: @measures_in_year.v0,
-        v4: @measures_in_year.v1,
-        v5: @measures_in_year.v2,
-        v0_: @measures_change.v0,
-        v1_: @measures_change.v1,
-        v2_: @measures_change.v2,
-        v3_: @measures_change_in_year.v0,
-        v4_: @measures_change_in_year.v1,
-        v5_: @measures_change_in_year.v2
-      }
-    )
-  end
-
   def diff345to123(cm1)
     cm2 = self.dup
     if cm2.measures.empty? && !cm2.measures_in_year.empty? && !cm1.measures_in_year.empty?
