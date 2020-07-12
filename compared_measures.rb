@@ -1,11 +1,6 @@
 require './measures.rb'
 
 class ComparedMeasures
-  attr_accessor :monthly_value
-  attr_accessor :yearly_value
-  attr_accessor :monthly_change
-  attr_accessor :yearly_change
-
   def self.map_sheet_row(sheet_in_month, sheet_in_year, columns)
     self.create_from_block do |measures_key, v_key|
       if [:monthly_value, :monthly_change].include?(measures_key)
@@ -70,19 +65,14 @@ class ComparedMeasures
   end
 
   def initialize(monthly_value, yearly_value, monthly_change = nil, yearly_change = nil)
-    @monthly_value = monthly_value
-    @yearly_value = yearly_value
-    @monthly_change = monthly_change || Measures.new(nil, nil, nil)
-    @yearly_change = yearly_change || Measures.new(nil, nil, nil)
-
     @measures_hash = {
       monthly: {
         value: monthly_value,
-        change: @monthly_change
+        change: monthly_change || Measures.new(nil, nil, nil)
       },
       yearly: {
-        value: @yearly_value,
-        change: @yearly_change
+        value: yearly_value,
+        change: yearly_change || Measures.new(nil, nil, nil)
       }
     }
   end
@@ -95,22 +85,42 @@ class ComparedMeasures
     end.flatten
   end
 
-  def find_measures(term: :monthly, type: :value)
-    #return @measures_hash[term][type]
 
-    if term == :monthly
-      if type == :value
-        @monthly_value
-      else
-        @monthly_change
-      end
-    else
-      if type == :value
-        @yearly_value
-      else
-        @yearly_change
-      end
-    end
+  def monthly_value
+    @measures_hash[:monthly][:value]
+  end
+
+  def yearly_value
+    @measures_hash[:yearly][:value]
+  end
+
+  def monthly_change
+    @measures_hash[:monthly][:change]
+  end
+
+  def yearly_change
+    @measures_hash[:yearly][:change]
+  end
+
+  def monthly_value=(monthly_value)
+    @measures_hash[:monthly][:value] = monthly_value
+  end
+
+  def yearly_value=(yearly_value)
+    @measures_hash[:yearly][:value] = yearly_value
+  end
+
+  def monthly_change=(monthly_change)
+    @measures_hash[:monthly][:change] = monthly_change
+  end
+
+  def yearly_change=(yearly_change)
+    @measures_hash[:yearly][:change] = yearly_change
+  end
+
+
+  def find_measures(term: :monthly, type: :value)
+    return @measures_hash[term][type]
   end
 
   def fill_measures(cm1)
@@ -125,11 +135,11 @@ class ComparedMeasures
   end
 
   def last_year
-    return nil if @monthly_change.empty? || @yearly_change.empty?
+    return nil if monthly_change.empty? || yearly_change.empty?
 
     ComparedMeasures.new(
-      @monthly_value - @monthly_change,
-      @yearly_value - @yearly_change
+      monthly_value - monthly_change,
+      yearly_value - yearly_change
     )
   end
 
