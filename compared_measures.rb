@@ -3,7 +3,7 @@ require './measures.rb'
 class ComparedMeasures
   def self.map_sheet_row(sheet_in_month, sheet_in_year, columns)
     self.create_from_block do |term, type, v_key|
-      sheet =  (term == :monthly ? sheet_in_month : sheet_in_year)
+      sheet = sheets[term]
       column = columns[type][v_key]
 
       next nil unless sheet

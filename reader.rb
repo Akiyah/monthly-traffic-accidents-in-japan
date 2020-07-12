@@ -15,11 +15,9 @@ class Reader
       excel = Roo::Excel.new(filename)
     end
 
-    sheet_in_month, sheet_in_year = sheets
-
     area_prefecture_indexes.each do |area, prefectures|
       prefectures.each do |prefecture, row|
-        cm = ComparedMeasures.map_sheet_row(sheet_in_month, sheet_in_year, columns) do |sheet, column|
+        cm = ComparedMeasures.map_sheet_row(sheets, columns) do |sheet, column|
           excel.sheet(sheet).cell(row, column).to_i
         end
         yield(area, prefecture, cm)
@@ -51,19 +49,19 @@ end
 
 class ReaderA1 < ReaderA
   def sheets
-    ['表4-1', '表4-2']
+    { monthly: '表4-1', yearly: '表4-2' }
   end
 end
 
 class ReaderA2 < ReaderA
   def sheets
-    [nil, '表6-2']
+    { monthly: nil, yearly: '表6-2' }
   end
 end
 
 class ReaderA3 < ReaderA
   def sheets
-    ['県別_表24', '県別_表25']
+    { monthly: '県別_表24', yearly: '県別_表25' }
   end
 end
 
@@ -96,18 +94,18 @@ end
 
 class ReaderB1 < ReaderB
   def sheets
-    [nil, '県別人口（P41）']
+    { monthly: nil, yearly: '県別人口（P41）' }
   end
 end
 
 class ReaderB2 < ReaderB
   def sheets
-    [nil, '県別人口（P38）']
+    { monthly: nil, yearly: '県別人口（P38）' }
   end
 end
 
 class ReaderB3 < ReaderB
   def sheets
-    [nil, '県別人口（P40）']
+    { monthly: nil, yearly: '県別人口（P40）' }
   end
 end

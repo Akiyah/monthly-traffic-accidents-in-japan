@@ -122,7 +122,7 @@ class YearMonthAreaPrefectureData
     CSV.open('tsv/monthly-traffic-accidents-in-japan.tsv','w', col_sep: "\t") do |tsv|
       tsv << %w(年 月 管区 都道府県 発生件数（速報値） 死者数（確定値） 負傷者数（速報値）)
       each do |year, month, area, prefecture, cm|
-        tsv << [year, month, area, prefecture] + cm.to_a[0..2]
+        tsv << [year, month, area, prefecture] + cm.monthly_value.to_a
       end
     end
   end
