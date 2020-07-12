@@ -68,14 +68,14 @@ class YearMonthAreaPrefectureData
       format = param[:format]
     
       if cacher.exists?(year, month)
-        cacher.read(year, month) do |area, prefecture, m|
-          set(year, month, area, prefecture, m)
+        cacher.read(year, month) do |area, prefecture, cm|
+          set(year, month, area, prefecture, cm)
         end
       else
         filename = downloader.download(year, month, url)
         reader = Reader.create(format)
-        reader.read(filename) do |area, prefecture, m|
-          set(year, month, area, prefecture, m)
+        reader.read(filename) do |area, prefecture, cm|
+          set(year, month, area, prefecture, cm)
         end
         cacher.write(year, month, self)
       end
@@ -121,8 +121,8 @@ class YearMonthAreaPrefectureData
     puts "write tsv file"
     CSV.open('tsv/monthly-traffic-accidents-in-japan.tsv','w', col_sep: "\t") do |tsv|
       tsv << %w(年 月 管区 都道府県 発生件数（速報値） 死者数（確定値） 負傷者数（速報値）)
-      each do |year, month, area, prefecture, m|
-        tsv << [year, month, area, prefecture] + m.to_a[0..2]
+      each do |year, month, area, prefecture, cm|
+        tsv << [year, month, area, prefecture] + cm.to_a[0..2]
       end
     end
   end

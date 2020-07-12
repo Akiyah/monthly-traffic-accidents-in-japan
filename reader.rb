@@ -35,15 +35,15 @@ class ReaderA < Reader
 
   def columns
     {
-      mesures: {
-        v0: 'C',
-        v1: 'F',
-        v2: 'J'
+      value: {
+        accidents: 'C',
+        fatalities: 'F',
+        injuries: 'J'
       },
-      mesures_change: {
-        v0: 'D',
-        v1: 'G',
-        v2: 'K'
+      change: {
+        accidents: 'D',
+        fatalities: 'G',
+        injuries: 'K'
       }
     }
   end
@@ -80,15 +80,15 @@ class ReaderB < Reader
 
   def columns
     {
-      mesures: {
-        v0: 'I',
-        v1: 'J',
-        v2: 'K'
+      value: {
+        accidents: 'I',
+        fatalities: 'J',
+        injuries: 'K'
       },
-      mesures_change: {
-        v0: nil,
-        v1: nil,
-        v2: nil
+      change: {
+        accidents: nil,
+        fatalities: nil,
+        injuries: nil
       }
     }
   end
