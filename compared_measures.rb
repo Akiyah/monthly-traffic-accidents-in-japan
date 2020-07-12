@@ -2,18 +2,9 @@ require './measures.rb'
 
 class ComparedMeasures
   def self.map_sheet_row(sheet_in_month, sheet_in_year, columns)
-    self.create_from_block do |measures_key, v_key|
-      if [:monthly_value, :monthly_change].include?(measures_key)
-        sheet = sheet_in_month
-      else
-        sheet = sheet_in_year
-      end
-
-      if [:monthly_value, :yearly_value].include?(measures_key)
-        column = columns[:value][v_key]
-      else
-        column = columns[:change][v_key]
-      end
+    self.create_from_block do |term, type, v_key|
+      sheet =  (term == :monthly ? sheet_in_month : sheet_in_year)
+      column = columns[type][v_key]
 
       next nil unless sheet
       next nil unless column
@@ -22,50 +13,32 @@ class ComparedMeasures
   end
 
   def self.sum(prefectures)
-    self.create_from_block do |measures_key, v_key|
-      next nil unless prefectures.all? { |prefecture, m| m.send(measures_key).send(v_key) }
-      prefectures.sum { |prefecture, m| m.send(measures_key).send(v_key) }
+    self.create_from_block do |term, type, v_key|
+      next nil unless prefectures.all? { |prefecture, m| m.get(term, type).send(v_key) }
+      prefectures.sum { |prefecture, m| m.get(term, type).send(v_key) }
     end
   end
 
   def self.create_from_block
-    monthly_value = Measures.create_from_block do |v_key|
-      yield(:monthly_value, v_key)
-    end
-
-    yearly_value = Measures.create_from_block do |v_key|
-      yield(:yearly_value, v_key)
-    end
-
-    monthly_change = Measures.create_from_block do |v_key|
-      yield(:monthly_change, v_key)
-    end
-
-    yearly_change = Measures.create_from_block do |v_key|
-      yield(:yearly_change, v_key)
-    end
-
     ComparedMeasures.new(
-      monthly_value,
-      yearly_value,
-      monthly_change,
-      yearly_change
+      Measures.create_from_block { |v_key| yield(:monthly, :value, v_key) },
+      Measures.create_from_block { |v_key| yield(:yearly, :value, v_key) },
+      Measures.create_from_block { |v_key| yield(:monthly, :change, v_key) },
+      Measures.create_from_block { |v_key| yield(:yearly, :change, v_key) }
     )
   end
 
   def self.create_from_a(a)
-    v0, v1, v2, v3, v4, v5, v0_, v1_, v2_, v3_, v4_, v5_ = a
-
     ComparedMeasures.new(
-      Measures.new(v0, v1, v2),
-      Measures.new(v3, v4, v5),
-      Measures.new(v0_, v1_, v2_),
-      Measures.new(v3_, v4_, v5_)
+      Measures.new(*a[0..2]),
+      Measures.new(*a[3..5]),
+      Measures.new(*a[6..8]),
+      Measures.new(*a[9..11])
     )
   end
 
   def initialize(monthly_value, yearly_value, monthly_change = nil, yearly_change = nil)
-    @measures_hash = {
+    @measures = {
       monthly: {
         value: monthly_value,
         change: monthly_change || Measures.new(nil, nil, nil)
@@ -80,48 +53,28 @@ class ComparedMeasures
   def to_a
     [:value, :change].map do |type|
       [:monthly, :yearly].map do |term|
-        find_measures(term: term, type: type).to_a
+        get(term, type).to_a
       end
     end.flatten
   end
 
-
-  def monthly_value
-    @measures_hash[:monthly][:value]
+  def get(term, type)
+    @measures[term][type]
   end
 
-  def yearly_value
-    @measures_hash[:yearly][:value]
+  def set(term, type, m)
+    @measures[term][type] = m
   end
 
-  def monthly_change
-    @measures_hash[:monthly][:change]
-  end
+  def monthly_value; get(:monthly, :value); end
+  def yearly_value; get(:yearly, :value); end
+  def monthly_change; get(:monthly, :change); end
+  def yearly_change; get(:yearly, :change); end
 
-  def yearly_change
-    @measures_hash[:yearly][:change]
-  end
-
-  def monthly_value=(monthly_value)
-    @measures_hash[:monthly][:value] = monthly_value
-  end
-
-  def yearly_value=(yearly_value)
-    @measures_hash[:yearly][:value] = yearly_value
-  end
-
-  def monthly_change=(monthly_change)
-    @measures_hash[:monthly][:change] = monthly_change
-  end
-
-  def yearly_change=(yearly_change)
-    @measures_hash[:yearly][:change] = yearly_change
-  end
-
-
-  def find_measures(term: :monthly, type: :value)
-    return @measures_hash[term][type]
-  end
+  def monthly_value=(m); set(:monthly, :value, m); end
+  def yearly_value=(m); set(:yearly, :value, m); end
+  def monthly_change=(m); set(:monthly, :change, m); end
+  def yearly_change=(m); set(:yearly, :change, m); end
 
   def fill_measures(cm1)
     cm2 = self.dup
