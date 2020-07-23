@@ -67,7 +67,7 @@ end
 
 class ReaderA4 < ReaderA
   def sheets
-    ['県別_表24', '県別_表24']
+    { monthly: '県別_表24', yearly: '県別_表24' }
   end
 end
 

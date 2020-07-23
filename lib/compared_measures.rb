@@ -1,7 +1,7 @@
 require './lib/measures.rb'
 
 class ComparedMeasures
-  def self.map_sheet_row(sheet_in_month, sheet_in_year, columns)
+  def self.map_sheet_row(sheets, columns)
     self.create_from_block do |term, type, v_key|
       sheet = sheets[term]
       column = columns[type][v_key]
