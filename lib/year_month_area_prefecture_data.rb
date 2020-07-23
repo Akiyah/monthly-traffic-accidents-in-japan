@@ -1,11 +1,11 @@
 require 'roo'
 require 'roo-xls'
 require 'csv'
-require './reader.rb'
-require './downloader.rb'
-require './cacher.rb'
-require './params.rb'
-require './compared_measures.rb'
+require './lib/reader.rb'
+require './lib/downloader.rb'
+require './lib/cacher.rb'
+require './lib/params.rb'
+require './lib/compared_measures.rb'
 
 class YearMonthAreaPrefectureData
   def initialize

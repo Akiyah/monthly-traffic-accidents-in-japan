@@ -1,4 +1,4 @@
-require './measures.rb'
+require './lib/measures.rb'
 
 class ComparedMeasures
   def self.map_sheet_row(sheet_in_month, sheet_in_year, columns)

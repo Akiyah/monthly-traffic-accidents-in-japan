@@ -1,6 +1,6 @@
 require 'roo'
 require 'roo-xls'
-require './params.rb'
+require './lib/params.rb'
 
 class Reader
   def self.create(format)

@@ -1,5 +1,5 @@
 require 'csv'
-require './compared_measures.rb'
+require './lib/compared_measures.rb'
 
 class Cacher
   def filename(year, month)
