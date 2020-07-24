@@ -1,7 +1,7 @@
 require './lib/measures.rb'
 
 RSpec.describe Measures do
-  context "#create_from_block" do
+  context ".create_from_block" do
     it do
       measures = Measures.create_from_block do |key|
         {
