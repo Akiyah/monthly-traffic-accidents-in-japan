@@ -15,7 +15,7 @@ RSpec.describe Reader do
 
     context "A1" do
       let(:reader) { Reader.create('A1') }
-      let(:path) { './download/xls/2020_05.xlsx' }
+      let(:path) { 'download/xls/2020_05.xlsx' }
       let(:expected) do
         [
           18107, 194, 21562,
@@ -32,7 +32,7 @@ RSpec.describe Reader do
 
     context "A2" do
       let(:reader) { Reader.create('A2') }
-      let(:path) { './download/xls/2019_12.xlsx' }
+      let(:path) { 'download/xls/2019_12.xlsx' }
       let(:expected) do
         [
           nil, nil, nil,
@@ -49,7 +49,7 @@ RSpec.describe Reader do
 
     context "A3" do
       let(:reader) { Reader.create('A3') }
-      let(:path) { './download/xls/2018_11.xls' }
+      let(:path) { 'download/xls/2018_11.xls' }
       let(:expected) do
         [
           37203, 326, 44925,
@@ -66,7 +66,7 @@ RSpec.describe Reader do
 
     context "A4" do
       let(:reader) { Reader.create('A4') }
-      let(:path) { './download/xls/2018_01.xls' }
+      let(:path) { 'download/xls/2018_01.xls' }
       let(:expected) do
         [
           34599, 319, 42444,
@@ -83,7 +83,7 @@ RSpec.describe Reader do
 
     context "B1" do
       let(:reader) { Reader.create('B1') }
-      let(:path) { './download/xls/2018_12.xls' }
+      let(:path) { 'download/xls/2018_12.xls' }
       let(:expected) do
         [
           nil, nil, nil,
@@ -100,7 +100,7 @@ RSpec.describe Reader do
 
     context "B2" do
       let(:reader) { Reader.create('B2') }
-      let(:path) { './download/xls/2017_06.xls' }
+      let(:path) { 'download/xls/2017_06.xls' }
       let(:expected) do
         [
           nil, nil, nil,
@@ -117,7 +117,7 @@ RSpec.describe Reader do
 
     context "B3" do
       let(:reader) { Reader.create('B3') }
-      let(:path) { './download/xls/2015_12.xls' }
+      let(:path) { 'download/xls/2015_12.xls' }
       let(:expected) do
         [
           nil, nil, nil,
