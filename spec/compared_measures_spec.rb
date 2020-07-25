@@ -237,4 +237,76 @@ RSpec.describe ComparedMeasures do
       end
     end
   end
+
+  context "#fill_measures" do
+    let(:compared_measures) do
+      ComparedMeasures.new(
+        Measures.new(nil, nil, nil),
+        Measures.new(160, 16, 210),
+        Measures.new(nil, nil, nil),
+        Measures.new(-32, -4, -42)
+      )
+    end
+
+    let(:compared_measures1) do
+      ComparedMeasures.new(
+        Measures.new(50, 5, 60),
+        Measures.new(150, 15, 180),
+        Measures.new(-10, -1, -11),
+        Measures.new(-30, -3, -33)
+      )
+    end
+
+    it do
+      compared_measures2 = compared_measures.fill_measures(compared_measures1)
+
+      expect(compared_measures2.monthly_value.to_a).to eq [160-150, 16-15, 210-180]
+      expect(compared_measures2.yearly_value.to_a).to eq [160, 16, 210]
+      expect(compared_measures2.monthly_change.to_a).to eq [-32+30, -4+3, -42+33]
+      expect(compared_measures2.yearly_change.to_a).to eq [-32, -4, -42]
+    end
+  end
+
+  context "#last_year" do
+    let(:compared_measures) do
+      ComparedMeasures.new(
+        Measures.new(50, 5, 60),
+        Measures.new(150, 15, 180),
+        Measures.new(-10, -1, -11),
+        Measures.new(-30, -3, -33)
+      )
+    end
+
+    it do
+      compared_measures2 = compared_measures.last_year
+
+      expect(compared_measures2.monthly_value.to_a).to eq [50+10, 5+1, 60+11]
+      expect(compared_measures2.yearly_value.to_a).to eq [150+30, 15+3, 180+33]
+      expect(compared_measures2.monthly_change.to_a).to eq [nil, nil, nil]
+      expect(compared_measures2.yearly_change.to_a).to eq [nil, nil, nil]
+    end
+  end
+
+  context "#next_month" do
+    let(:cm) do
+      ComparedMeasures.new(
+        Measures.new(50, 5, 60),
+        Measures.new(150, 15, 180)
+      )
+    end
+
+    let(:cm_next_next_month) do
+      ComparedMeasures.new(
+        Measures.new(70, 7, 80),
+        Measures.new(210, 21, 240)
+      )
+    end
+
+    it do
+      cm_next_month = cm.next_month(cm_next_next_month)
+
+      expect(cm_next_month.monthly_value.to_a).to eq [210-70-150, 21-7-15, 240-80-180]
+      expect(cm_next_month.yearly_value.to_a).to eq [210-70, 21-7, 240-80]
+    end
+  end
 end
