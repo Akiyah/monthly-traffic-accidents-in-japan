@@ -23,7 +23,7 @@ RSpec.describe Cacher do
     end
   end
 
-  context "#write & #read" do
+  context "#write" do
     before do
       compared_measures1 = ComparedMeasures.create_from_a((1..12).to_a)
       compared_measures2 = ComparedMeasures.create_from_a((13..24).to_a)
@@ -33,6 +33,18 @@ RSpec.describe Cacher do
 
     it do
       cacher.write(2020, 4, data)
+      result = File.read("./spec/download/tsv/2020_4.tsv")
+      expected = File.read("./spec/download/tsv/2020_4_expected.tsv")
+      expect(result).to eq expected
+    end
+  end
+
+  context "#read" do
+    before do
+      FileUtils.cp("./spec/download/tsv/2020_4_expected.tsv", "./spec/download/tsv/2020_4.tsv")
+    end
+
+    it do
       result = []
       cacher.read(2020, 4) do |area, prefecture, cm|
         result << [area, prefecture, cm.to_a]
