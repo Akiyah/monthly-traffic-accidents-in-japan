@@ -1,2 +1,4 @@
+.DS_Store
 /download/
 spec/download/tsv/2020_4.tsv
+spec/tsv/monthly-traffic-accidents-in-japan.tsv

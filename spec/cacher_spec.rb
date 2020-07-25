@@ -3,18 +3,18 @@ require './lib/cacher.rb'
 require './lib/year_month_area_prefecture_data.rb'
 
 RSpec.describe Cacher do
-  let(:cacher) { Cacher.new('./spec/download/tsv') }
-  let(:data) { YearMonthAreaPrefectureData.new('./spec/download/tsv', './spec/download/xls') }
+  let(:cacher) { Cacher.new('spec/download/tsv') }
+  let(:data) { YearMonthAreaPrefectureData.new('spec/download/tsv', 'spec/download/xls') }
 
   before do
-    ["./spec/download/tsv/2020_4.tsv", "./spec/download/tsv/2020_5.tsv"].each do |path|
+    ["spec/download/tsv/2020_4.tsv", "spec/download/tsv/2020_5.tsv"].each do |path|
       File.delete(path) if File.exist?(path)
     end
   end
 
   context "#exists?" do
     before do
-      FileUtils.touch("./spec/download/tsv/2020_5.tsv")
+      FileUtils.touch("spec/download/tsv/2020_5.tsv")
     end
 
     it do
@@ -33,15 +33,15 @@ RSpec.describe Cacher do
 
     it do
       cacher.write(2020, 4, data)
-      result = File.read("./spec/download/tsv/2020_4.tsv")
-      expected = File.read("./spec/download/tsv/2020_4_expected.tsv")
+      result = File.read("spec/download/tsv/2020_4.tsv")
+      expected = File.read("spec/download/tsv/2020_4_expected.tsv")
       expect(result).to eq expected
     end
   end
 
   context "#read" do
     before do
-      FileUtils.cp("./spec/download/tsv/2020_4_expected.tsv", "./spec/download/tsv/2020_4.tsv")
+      FileUtils.cp("spec/download/tsv/2020_4_expected.tsv", "spec/download/tsv/2020_4.tsv")
     end
 
     it do

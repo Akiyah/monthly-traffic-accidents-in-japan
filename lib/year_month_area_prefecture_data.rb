@@ -1,5 +1,3 @@
-require 'roo'
-require 'roo-xls'
 require 'csv'
 require './lib/reader.rb'
 require './lib/downloader.rb'
@@ -18,25 +16,25 @@ class YearMonthAreaPrefectureData
     @data.dig(year, month, area, prefecture)
   end
 
-  def set(year, month, area, prefecture, m)
-    return unless m
+  def set(year, month, area, prefecture, cm)
+    return unless cm
     @data[year] ||= {}
     @data[year][month] ||= {}
     @data[year][month][area] ||= {}
-    @data[year][month][area][prefecture] = m
+    @data[year][month][area][prefecture] = cm
   end
 
-  def set_if_nil(year, month, area, prefecture, m)
+  def set_if_nil(year, month, area, prefecture, cm)
     unless get(year, month, area, prefecture)
-      set(year, month, area, prefecture, m)
+      set(year, month, area, prefecture, cm)
     end
   end
 
   def each
     @data.dup.each do |year, _|
       @data[year].dup.each do |month, _|
-        each_ym(year, month) do |area, prefecture, m|
-          yield(year, month, area, prefecture, m)
+        each_ym(year, month) do |area, prefecture, cm|
+          yield(year, month, area, prefecture, cm)
         end
       end
     end
@@ -44,8 +42,8 @@ class YearMonthAreaPrefectureData
 
   def each_ym(year, month)
     @data[year][month].dup.each do |area, _|
-      @data[year][month][area].dup.each do |prefecture, m|
-        yield(area, prefecture, m)
+      @data[year][month][area].dup.each do |prefecture, cm|
+        yield(area, prefecture, cm)
       end
     end
   end
@@ -119,9 +117,9 @@ class YearMonthAreaPrefectureData
     end
   end
 
-  def write
+  def write(path)
     puts "write tsv file"
-    CSV.open('tsv/monthly-traffic-accidents-in-japan.tsv','w', col_sep: "\t") do |tsv|
+    CSV.open(path,'w', col_sep: "\t") do |tsv|
       tsv << %w(年 月 管区 都道府県 発生件数（速報値） 死者数（確定値） 負傷者数（速報値）)
       each do |year, month, area, prefecture, cm|
         tsv << [year, month, area, prefecture] + cm.monthly_value.to_a
