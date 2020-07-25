@@ -1,12 +1,13 @@
 require 'open-uri'
 
 class Downloader
-  def download(year, month, url)
-    Dir.mkdir('download') unless Dir.exist?('download')
-    Dir.mkdir('download/xls') unless Dir.exist?('download/xls')
+  def initialize(path)
+    @path = path
+  end
 
-    filename_xls = "download/xls/%d_%02d.xls" % [year, month]
-    filename_xlsx = "download/xls/%d_%02d.xlsx" % [year, month]
+  def download(year, month, url)
+    filename_xls = "%s/%d_%02d.xls" % [@path, year, month]
+    filename_xlsx = "%s/%d_%02d.xlsx" % [@path, year, month]
 
     return filename_xls if File.exist?(filename_xls)
     return filename_xlsx if File.exist?(filename_xlsx)

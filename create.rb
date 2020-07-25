@@ -1,6 +1,11 @@
 require './lib/year_month_area_prefecture_data.rb'
 
-data = YearMonthAreaPrefectureData.new
+
+Dir.mkdir('download') unless Dir.exist?('download')
+Dir.mkdir('download/tsv') unless Dir.exist?('download/tsv')
+Dir.mkdir('download/xls') unless Dir.exist?('download/xls')
+
+data = YearMonthAreaPrefectureData.new('download/tsv', 'download/xls')
 
 data.read
 data.fill

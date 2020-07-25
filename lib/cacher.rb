@@ -2,8 +2,12 @@ require 'csv'
 require './lib/compared_measures.rb'
 
 class Cacher
+  def initialize(path)
+    @path = path
+  end
+
   def filename(year, month)
-    "download/tsv/#{year}_#{month}.tsv"
+    "#{@path}/#{year}_#{month}.tsv"
   end
 
   def exists?(year, month)
@@ -19,9 +23,6 @@ class Cacher
   end
 
   def write(year, month, data)
-    Dir.mkdir('download') unless Dir.exist?('download')
-    Dir.mkdir('download/tsv') unless Dir.exist?('download/tsv')
-
     CSV.open(filename(year, month), 'w', col_sep: "\t") do |tsv|
       data.each_ym(year, month) do |area, prefecture, cm|
         tsv << [year, month, area, prefecture] + cm.to_a

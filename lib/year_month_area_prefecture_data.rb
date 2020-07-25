@@ -8,7 +8,9 @@ require './lib/params.rb'
 require './lib/compared_measures.rb'
 
 class YearMonthAreaPrefectureData
-  def initialize
+  def initialize(path_tsv, path_xls)
+    @path_tsv = path_tsv
+    @path_xls = path_xls
     @data = {}
   end
 
@@ -59,8 +61,8 @@ class YearMonthAreaPrefectureData
   end
 
   def read
-    downloader = Downloader.new
-    cacher = Cacher.new
+    downloader = Downloader.new(@path_xls)
+    cacher = Cacher.new(@path_tsv)
     PARAMS.each do |param|
       year = param[:year]
       month = param[:month]
