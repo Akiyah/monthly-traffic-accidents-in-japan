@@ -14,8 +14,8 @@ class ComparedMeasures
 
   def self.sum(prefectures)
     self.create_from_block do |term, type, v_key|
-      next nil unless prefectures.all? { |prefecture, m| m.get(term, type).send(v_key) }
-      prefectures.sum { |prefecture, m| m.get(term, type).send(v_key) }
+      next nil unless prefectures.all? { |prefecture, cm| cm.get(term, type).send(v_key) }
+      prefectures.sum { |prefecture, cm| cm.get(term, type).send(v_key) }
     end
   end
 
@@ -62,8 +62,8 @@ class ComparedMeasures
     @measures[term][type]
   end
 
-  def set(term, type, m)
-    @measures[term][type] = m
+  def set(term, type, cm)
+    @measures[term][type] = cm
   end
 
   def monthly_value; get(:monthly, :value); end
@@ -71,10 +71,10 @@ class ComparedMeasures
   def monthly_change; get(:monthly, :change); end
   def yearly_change; get(:yearly, :change); end
 
-  def monthly_value=(m); set(:monthly, :value, m); end
-  def yearly_value=(m); set(:yearly, :value, m); end
-  def monthly_change=(m); set(:monthly, :change, m); end
-  def yearly_change=(m); set(:yearly, :change, m); end
+  def monthly_value=(cm); set(:monthly, :value, cm); end
+  def yearly_value=(cm); set(:yearly, :value, cm); end
+  def monthly_change=(cm); set(:monthly, :change, cm); end
+  def yearly_change=(cm); set(:yearly, :change, cm); end
 
   def fill_measures(cm1)
     cm2 = self.dup
