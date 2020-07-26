@@ -95,7 +95,7 @@ class YearMonthAreaPrefectureData
     each do |year, month, area, prefecture, cm|
       cm_last_month = get(year, month - 1, area, prefecture)
       if cm_last_month
-        cm_new = cm.fill_measures(cm_last_month)
+        cm_new = cm.fill_monthly_measures(cm_last_month)
         set(year, month, area, prefecture, cm_new)
       end
     end

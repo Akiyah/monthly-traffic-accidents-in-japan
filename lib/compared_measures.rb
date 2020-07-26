@@ -76,7 +76,7 @@ class ComparedMeasures
   def monthly_change=(cm); set(:monthly, :change, cm); end
   def yearly_change=(cm); set(:yearly, :change, cm); end
 
-  def fill_measures(cm1)
+  def fill_monthly_measures(cm1)
     cm2 = self.dup
     if cm2.monthly_value.empty? && !cm2.yearly_value.empty? && !cm1.yearly_value.empty?
       cm2.monthly_value = cm2.yearly_value - cm1.yearly_value

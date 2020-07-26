@@ -238,7 +238,7 @@ RSpec.describe ComparedMeasures do
     end
   end
 
-  context "#fill_measures" do
+  context "#fill_monthly_measures" do
     let(:compared_measures) do
       ComparedMeasures.new(
         Measures.new(nil, nil, nil),
@@ -258,7 +258,7 @@ RSpec.describe ComparedMeasures do
     end
 
     it do
-      compared_measures2 = compared_measures.fill_measures(compared_measures1)
+      compared_measures2 = compared_measures.fill_monthly_measures(compared_measures1)
 
       expect(compared_measures2.monthly_value.to_a).to eq [160-150, 16-15, 210-180]
       expect(compared_measures2.yearly_value.to_a).to eq [160, 16, 210]
