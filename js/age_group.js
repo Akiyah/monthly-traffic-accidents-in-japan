@@ -87,7 +87,7 @@ function drawChart(csv) {
 
   let datasets0 = [];
   age_groups.forEach((age_group, i) => {
-    datasets0.push(createDataset(age_groups, COLORS[i % COLORS.length], yms.map(ym => age_group_ym[age_group][ym])));
+    datasets0.push(createDataset(age_group, COLORS[i % COLORS.length], yms.map(ym => age_group_ym[age_group][ym])));
   });
 
   let ctx0 = document.getElementById("chart0").getContext("2d");
