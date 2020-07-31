@@ -86,7 +86,7 @@ function drawChart(csv) {
   yms.sort();
 
   let datasets0 = [];
-  areas.forEach((area, i) => {
+  age_groups.forEach((age_group, i) => {
     datasets0.push(createDataset(age_groups, COLORS[i % COLORS.length], yms.map(ym => age_group_ym[age_group][ym])));
   });
 
