@@ -2,13 +2,11 @@ require 'csv'
 require './lib/reader.rb'
 require './lib/reader2.rb'
 require './lib/downloader.rb'
-require './lib/cacher.rb'
 require './lib/params.rb'
 require './lib/compared_measures.rb'
 
 class AgeGroupData
-  def initialize(path_tsv, path_xls)
-    @path_tsv = path_tsv
+  def initialize(path_xls)
     @path_xls = path_xls
     @data = {}
   end
@@ -52,7 +50,7 @@ class AgeGroupData
   end
 
   def diff
-    d = AgeGroupData.new(@path_tsv, @path_xls)
+    d = AgeGroupData.new(@path_xls)
     each do |year, month, age_group, road_user_type, value|
       if 1 < month
         value_last_month = get(year, month - 1, age_group, road_user_type)

@@ -1,13 +1,11 @@
 require 'csv'
 require './lib/reader.rb'
 require './lib/downloader.rb'
-require './lib/cacher.rb'
 require './lib/params.rb'
 require './lib/compared_measures.rb'
 
 class YearMonthAreaPrefectureData
-  def initialize(path_tsv, path_xls)
-    @path_tsv = path_tsv
+  def initialize(path_xls)
     @path_xls = path_xls
     @data = {}
   end
@@ -60,24 +58,16 @@ class YearMonthAreaPrefectureData
 
   def read
     downloader = Downloader.new(@path_xls)
-    cacher = Cacher.new(@path_tsv)
     PARAMS.each do |param|
       year = param[:year]
       month = param[:month]
       url = param[:url]
       format = param[:format]
-    
-      if cacher.exists?(year, month)
-        cacher.read(year, month) do |area, prefecture, cm|
-          set(year, month, area, prefecture, cm)
-        end
-      else
-        filename = downloader.download(year, month, url)
-        reader = Reader.create(format)
-        reader.read(filename) do |area, prefecture, cm|
-          set(year, month, area, prefecture, cm)
-        end
-        cacher.write(year, month, self)
+
+      filename = downloader.download(year, month, url)
+      reader = Reader.create(format)
+      reader.read(filename) do |area, prefecture, cm|
+        set(year, month, area, prefecture, cm)
       end
     end
   end
