@@ -1,7 +1,7 @@
 require './lib/year_month_area_prefecture_data.rb'
 
 RSpec.describe YearMonthAreaPrefectureData do
-  let(:data) { YearMonthAreaPrefectureData.new('spec/download/tsv', 'spec/download/xls') }
+  let(:data) { YearMonthAreaPrefectureData.new('spec/download/xls') }
 
   context "#get & #set" do
     it do
