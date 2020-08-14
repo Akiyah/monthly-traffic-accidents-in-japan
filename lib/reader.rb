@@ -1,6 +1,5 @@
-require 'roo'
-require 'roo-xls'
 require './lib/params.rb'
+require './lib/csv_wrapper.rb'
 
 class Reader
   def self.create(format)
@@ -9,25 +8,12 @@ class Reader
 
   def read(filename)
     puts "read: #{filename}"
-    if filename.end_with?('xlsx')
-      excel = Roo::Excelx.new(filename)
-    else
-      excel = Roo::Excel.new(filename)
-    end
-
-    csv_data = {}
-    sheets.each do |term, sheet|
-      next unless sheet
-      csv_text = excel.sheet(sheet).to_csv
-      csv_data[sheet] = CSV.parse(csv_text)
-    end
+    csv_wrapper = CsvWrapper.new(filename)
 
     area_prefecture_indexes.each do |area, prefectures|
       prefectures.each do |prefecture, row|
         cm = ComparedMeasures.map_sheet_row(sheets, columns) do |sheet, column|
-          column_index = ('A'..'Z').to_a.index(column)
-          row_index = row - 1
-          csv_data[sheet][row_index][column_index].to_i
+          csv_wrapper.read(sheet, row, column).to_i
         end
         yield(area, prefecture, cm)
       end
