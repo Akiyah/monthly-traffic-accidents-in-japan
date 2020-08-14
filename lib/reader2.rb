@@ -16,11 +16,20 @@ class Reader2
       excel = Roo::Excel.new(filename)
     end
 
+    csv_data = {}
+    age_group_sheet_rows.each do |age_group, sheet, rows|
+      next unless sheet
+      csv_text = excel.sheet(sheet).to_csv
+      csv_data[sheet] = CSV.parse(csv_text)
+    end
+
     year_column.each do |year, column|
       age_group_sheet_rows.each do |age_group, sheet, rows|
         road_user_type_index.each do |road_user_type, index|
           value = rows.sum do |row|
-            excel.sheet(sheet).cell(row + index, column).to_i
+            column_index = ('A'..'Z').to_a.index(column)
+            row_index = row - 1
+            csv_data[sheet][row_index + index][column_index].to_i
           end
           yield(year, @month, age_group, road_user_type, value)
         end
