@@ -19,7 +19,7 @@ class AgeGroupData
     @data[year] ||= {}
     @data[year][month] ||= {}
     @data[year][month][age_group] ||= {}
-    @data[year][month][age_group][road_user_type] = value
+    @data[year][month][age_group][road_user_type] ||= value
   end
 
   def each
@@ -36,8 +36,9 @@ class AgeGroupData
 
   def read
     downloader = Downloader.new(@path_xls)
-    PARAMS[0...12].each do |param|
+    PARAMS.each do |param|
       last_year = param[:year]
+      next if last_year <= 2018
       month = param[:month]
       url = param[:url]
     
