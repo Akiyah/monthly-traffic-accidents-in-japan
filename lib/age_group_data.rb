@@ -37,13 +37,14 @@ class AgeGroupData
   def read
     downloader = Downloader.new(@path_xls)
     PARAMS.each do |param|
+      format2 = param[:format2]
+      next unless format2
       last_year = param[:year]
-      next if last_year <= 2018
       month = param[:month]
       url = param[:url]
     
       filename = downloader.download(last_year, month, url)
-      reader = Reader2.new(last_year, month)
+      reader = Reader2.create(format2, last_year, month)
       reader.read(filename) do |year, month, age_group, road_user_type, value|
         set(year, month, age_group, road_user_type, value)
       end
