@@ -93,23 +93,10 @@ class Reader2A2 < Reader2
   end
 end
 
-class Reader2A3 < Reader2
+class Reader2A1b < Reader2A1
   def age_group_sheet_rows
-    [
-      ['9歳以下', '表2-5', [7]],
-      ['10-19歳', '表2-5', [14]],
-      ['20-29歳', '表2-5', [21]],
-      ['30-39歳', '表2-5', [28]],
-      ['40-49歳', '表2-5', [35]],
-      ['50-59歳', '表2-5', [42]],
-      ['60-64歳', '表2-5', [49]],
-      ['65-69歳', '表2-6', [7]],
-      ['70-74歳', '表2-6', [14]],
-      ['75-79歳', '表2-6', [21]],
-      ['80-84歳', '表2-6', [28]],
-      ['85歳以上', '表2-6', [35]]
-    ].map do |a, b, c|
-      [a, b, c.map{ |i| i - 1 }]
+    super.map do |age_group, sheet, rows|
+      [age_group, sheet, rows.map{ |row| row - 1 }]
     end
   end
 end
