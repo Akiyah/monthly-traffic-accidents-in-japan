@@ -23,10 +23,11 @@ class AgeGroupData
   end
 
   def each
-    @data.dup.each do |year, _|
-      @data[year].dup.each do |month, _|
-        @data[year][month].dup.each do |age_group, _|
-          @data[year][month][age_group].dup.each do |road_user_type, value|
+    @data.keys.sort.reverse.each do |year|
+      @data[year].keys.sort.reverse.each do |month|
+        @data[year][month].keys.each do |age_group|
+          @data[year][month][age_group].keys.each do |road_user_type|
+            value = @data[year][month][age_group][road_user_type]
             yield(year, month, age_group, road_user_type, value)
           end
         end
