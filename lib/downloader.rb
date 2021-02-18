@@ -12,7 +12,7 @@ class Downloader
     return filename_xls if File.exist?(filename_xls)
     return filename_xlsx if File.exist?(filename_xlsx)
 
-    open(url) do |stream|
+    URI.open(url) do |stream|
       content_disposition = stream.meta["content-disposition"]
       filename = if content_disposition.end_with?('.xls')
         filename_xls
