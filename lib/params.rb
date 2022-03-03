@@ -1,4 +1,5 @@
 PARAMS = [
+  { year: 2021, month: 12, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000032169135&fileKind=4', format: 'A2', format2: 'A2' },
   { year: 2021, month: 11, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000032148394&fileKind=4', format: 'A1', format2: 'A1' },
   { year: 2021, month: 10, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000032138066&fileKind=4', format: 'A1', format2: 'A1' },
   { year: 2021, month:  9, url: 'https://www.e-stat.go.jp/stat-search/file-download?statInfId=000032128384&fileKind=4', format: 'A1', format2: 'A1' },
