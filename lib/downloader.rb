@@ -5,19 +5,45 @@ class Downloader
     @path = path
   end
 
-  def download(year, month, url)
-    filename_xls = "%s/%d_%02d.xls" % [@path, year, month]
-    filename_xlsx = "%s/%d_%02d.xlsx" % [@path, year, month]
+  def filename_xls(year, month, i = nil)
+    filename('xls', year, month, i)
+  end
 
-    return filename_xls if File.exist?(filename_xls)
-    return filename_xlsx if File.exist?(filename_xlsx)
+  def filename_xlsx(year, month, i = nil)
+    filename('xlsx', year, month, i)
+  end
+
+  def filename(extension, year, month, i = nil)
+    if i
+      "%s/%d_%02d_%d.%s" % [@path, year, month, i, extension]
+    else
+      "%s/%d_%02d.%s" % [@path, year, month, extension]
+    end
+  end
+
+  def download(year, month, urls)
+    if urls.instance_of?(Array)
+      urls.map.with_index do |url, i|
+        download_one(year, month, url, i)
+      end
+    end
+
+    download_one(year, month, urls)
+  end
+
+  def download_one(year, month, url, i = nil)
+    #filename_xls = "%s/%d_%02d.xls" % [@path, year, month]
+    #filename_xlsx = "%s/%d_%02d.xlsx" % [@path, year, month]
+
+    return filename_xls(year, month, i) if File.exist?(filename_xls(year, month, i))
+    return filename_xlsx(year, month, i) if File.exist?(filename_xlsx(year, month, i))
 
     URI.open(url) do |stream|
       content_disposition = stream.meta["content-disposition"]
       filename = if content_disposition.end_with?('.xls')
-        filename_xls
+        filename_xls(year, month, i)
       else
-        filename_xlsx
+        filename_xlsx(year, month, i)
       end
       puts "download: #{filename}"
       open(filename, 'w+b') do |file|
