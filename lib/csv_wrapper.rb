@@ -2,21 +2,33 @@ require 'roo'
 require 'roo-xls'
 
 class CsvWrapper
-  def initialize(filename)
-    if filename.end_with?('xlsx')
-      @excel = Roo::Excelx.new(filename)
-    else
-      @excel = Roo::Excel.new(filename)
+  def initialize(filenames)
+    @excels = Array(filenames).map do |filename|
+      if filename.end_with?('xlsx')
+        Roo::Excelx.new(filename)
+      else
+        Roo::Excel.new(filename)
+      end
     end
 
     @csv_data = {}
   end
 
-  def read(sheet, row, column)
-    @csv_data[sheet] ||= CSV.parse(@excel.sheet(sheet).to_csv)
+  def sheet(sheet_name)
+    @excels.each do |excel|
+      begin
+        return excel.sheet(sheet_name)
+      rescue
+      end
+    end
+    nil
+  end
+
+  def read(sheet_name, row, column)
+    @csv_data[sheet_name] ||= CSV.parse(sheet(sheet_name).to_csv)
 
     column_index = ('A'..'Z').to_a.index(column)
     row_index = row - 1
-    @csv_data[sheet][row_index][column_index]
+    @csv_data[sheet_name][row_index][column_index]
   end
 end

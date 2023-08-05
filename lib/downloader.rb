@@ -32,9 +32,6 @@ class Downloader
   end
 
   def download_one(year, month, url, i = nil)
-    #filename_xls = "%s/%d_%02d.xls" % [@path, year, month]
-    #filename_xlsx = "%s/%d_%02d.xlsx" % [@path, year, month]
-
     return filename_xls(year, month, i) if File.exist?(filename_xls(year, month, i))
     return filename_xlsx(year, month, i) if File.exist?(filename_xlsx(year, month, i))
 

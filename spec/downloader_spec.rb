@@ -2,7 +2,7 @@ require './lib/downloader.rb'
 
 RSpec.describe Downloader do
   let(:downloader) { Downloader.new('download/xls') }
-  
+
   describe "#filename_xls" do
     it do
       expect(downloader.filename_xls(2023, 7)).to eq 'download/xls/2023_07.xls'
