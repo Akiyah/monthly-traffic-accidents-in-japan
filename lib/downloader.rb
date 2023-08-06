@@ -23,7 +23,7 @@ class Downloader
 
   def download(year, month, urls)
     if urls.instance_of?(Array)
-      urls.map.with_index do |url, i|
+      return urls.map.with_index do |url, i|
         download_one(year, month, url, i)
       end
     end
