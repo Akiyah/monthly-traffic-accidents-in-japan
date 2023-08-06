@@ -80,7 +80,6 @@ RSpec.describe CsvWrapper do
       it do
         csv_wrapper = CsvWrapper.new(path)
 
-        
         expect(csv_wrapper.sheet('表2-5')).to_not eq nil
         expect(csv_wrapper.sheet('表2-6')).to_not eq nil
         expect(csv_wrapper.sheet('表2-7')).to eq nil
