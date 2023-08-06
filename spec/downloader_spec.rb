@@ -95,6 +95,47 @@ RSpec.describe Downloader do
     end
 
     context "urlが複数の場合" do
+      let(:stream1) { double(OpenURI::Meta)}
+      let(:stream2) { double(OpenURI::Meta)}
+      let(:file1) { instance_double(File) }
+      let(:file2) { instance_double(File) }
+
+      before do
+        allow(File).to receive(:exist?).with('download/xls/2023_07_0.xls').and_return(true)
+        allow(File).to receive(:exist?).with('download/xls/2023_07_0.xlsx').and_return(false)
+        allow(File).to receive(:exist?).with('download/xls/2023_07_1.xls').and_return(false)
+        allow(File).to receive(:exist?).with('download/xls/2023_07_1.xlsx').and_return(false)
+        allow(File).to receive(:exist?).with('download/xls/2023_07_2.xls').and_return(false)
+        allow(File).to receive(:exist?).with('download/xls/2023_07_2.xlsx').and_return(false)
+        allow(File).to receive(:exist?).with('download/xls/2023_07_3.xls').and_return(false)
+        allow(File).to receive(:exist?).with('download/xls/2023_07_3.xlsx').and_return(true)
+
+        allow(stream1).to receive(:read).and_return('stream content 1')
+        allow(stream2).to receive(:read).and_return('stream content 2')
+
+        allow(file1).to receive(:write)
+        allow(file2).to receive(:write)
+
+        allow(URI).to receive(:open).with('url1').and_yield(stream1)
+        allow(URI).to receive(:open).with('url2').and_yield(stream2)
+
+        allow(stream1).to receive(:meta).and_return({ "content-disposition" => 'filename.xls' })
+        allow(stream2).to receive(:meta).and_return({ "content-disposition" => 'filename.xlsx' })
+
+        expect_any_instance_of(Kernel).to receive(:open).with('download/xls/2023_07_1.xls', 'w+b').and_yield(file1)
+        expect_any_instance_of(Kernel).to receive(:open).with('download/xls/2023_07_2.xlsx', 'w+b').and_yield(file2)
+      end
+
+      it do
+        expect(file1).to receive(:write).with('stream content 1')
+        expect(file2).to receive(:write).with('stream content 2')
+        expect(downloader.download(2023, 7, ['url0', 'url1', 'url2', 'url3'])).to eq [
+          'download/xls/2023_07_0.xls',
+          'download/xls/2023_07_1.xls',
+          'download/xls/2023_07_2.xlsx',
+          'download/xls/2023_07_3.xlsx'
+        ]
+      end
     end
   end
 end
