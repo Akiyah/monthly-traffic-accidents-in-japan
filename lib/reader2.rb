@@ -17,7 +17,7 @@ class Reader2
 
     year_column.each do |year, column|
       age_group_sheet_rows.each do |age_group, sheet, rows|
-        road_user_type_index.each do |road_user_type, index|
+        road_user_type_index(year).each do |road_user_type, index|
           value = rows.sum do |row|
             csv_wrapper.read(sheet, row + index, column).to_i
           end
@@ -43,7 +43,7 @@ class Reader2
     ]
   end
 
-  def road_user_type_index()
+  def road_user_type_index(year)
     [
       ['自動車乗車中', 0],
       ['自動二輪車乗車中', 1],
@@ -97,6 +97,48 @@ class Reader2A1b < Reader2A1
   def age_group_sheet_rows
     super.map do |age_group, sheet, rows|
       [age_group, sheet, rows.map{ |row| row - 1 }]
+    end
+  end
+end
+
+class Reader2A3 < Reader2
+  def age_group_sheet_rows
+    [
+      ['9歳以下', '表2-5', [7]],
+      ['10-19歳', '表2-5', [15]],
+      ['20-29歳', '表2-5', [23]],
+      ['30-39歳', '表2-5', [31]],
+      ['40-49歳', '表2-5', [39]],
+      ['50-59歳', '表2-5', [47]],
+      ['60-64歳', '表2-5', [55]],
+      ['65-69歳', '表2-6', [7]],
+      ['70-74歳', '表2-6', [15]],
+      ['75-79歳', '表2-6', [23]],
+      ['80-84歳', '表2-6', [31]],
+      ['85歳以上', '表2-6', [39]]
+    ]
+  end
+
+  def road_user_type_index(year)
+    if 2024 <= year
+      [
+        ['自動車乗車中', 0],
+        ['自動二輪車乗車中', 1],
+        ['一般原付乗車中', 2],
+        ['特定小型原付乗車中', 3],
+        ['自転車乗用中', 4],
+        ['歩行中', 5],
+        ['その他', 6]
+      ]
+    else
+      [
+        ['自動車乗車中', 0],
+        ['自動二輪車乗車中', 1],
+        ['原付乗車中', 2],
+        ['自転車乗用中', 4],
+        ['歩行中', 5],
+        ['その他', 6]
+      ]
     end
   end
 end
